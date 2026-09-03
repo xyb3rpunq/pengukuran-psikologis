@@ -23,7 +23,7 @@ import {
   tabel,
   zonaImpor,
 } from '../komponen';
-import { bacaDeret, bacaLabel, bacaMatriks, matriksKeTeks } from '../masukan';
+import { bacaAngka, bacaDeret, bacaLabel, bacaMatriks, matriksKeTeks } from '../masukan';
 import { bangunKalkulator, type KonteksKalkulator } from '../kerangka';
 import { petaDistraktor, tanggaAlpha } from '../visual';
 import * as api from '../../mesin/api';
@@ -74,7 +74,7 @@ export function halamanDistraktor(konteks: KonteksKalkulator): HTMLElement {
         baca: () => ({
           matriks: bacaMatriks(data.bidang.value),
           kunci: bacaDeret(kunci.bidang.value),
-          banyakPilihan: bacaDeret(opsi.bidang.value)[0] ?? 5,
+          banyakPilihan: bacaAngka(opsi.bidang.value, 5),
           namaKolom: bacaLabel(nama.bidang.value),
         }),
       };
@@ -286,9 +286,9 @@ export function halamanSeleksi(konteks: KonteksKalkulator): HTMLElement {
           matriks: bacaMatriks(data.bidang.value),
           namaKolom: bacaLabel(nama.bidang.value),
           metode: metode.bidang.value as 'rTabel' | 'tetap',
-          ambang: bacaDeret(ambang.bidang.value)[0] ?? 0.3,
+          ambang: bacaAngka(ambang.bidang.value, 0.3),
           alpha: Number(taraf.bidang.value),
-          minButir: bacaDeret(minimum.bidang.value)[0] ?? 3,
+          minButir: bacaAngka(minimum.bidang.value, 3),
         }),
       };
     },

@@ -20,7 +20,7 @@ import {
   tabel,
   zonaImpor,
 } from '../komponen';
-import { bacaDeret, bacaLabel, bacaMatriks, matriksKeTeks } from '../masukan';
+import { bacaAngka, bacaLabel, bacaMatriks, matriksKeTeks } from '../masukan';
 import { bangunKalkulator, type KonteksKalkulator } from '../kerangka';
 import { petaMuatan, screePlot, termometerSus } from '../visual';
 import * as api from '../../mesin/api';
@@ -80,9 +80,9 @@ export function halamanFaktor(konteks: KonteksKalkulator): HTMLElement {
           return {
             matriks: bacaMatriks(data.bidang.value),
             namaKolom: bacaLabel(nama.bidang.value),
-            banyakFaktor: diminta === '' ? undefined : (bacaDeret(diminta)[0] as number),
+            banyakFaktor: diminta === '' ? undefined : bacaAngka(diminta),
             rotasi: rotasi.bidang.value as 'varimax' | 'promax' | 'none',
-            batasMuatan: bacaDeret(batas.bidang.value)[0] ?? 0.4,
+            batasMuatan: bacaAngka(batas.bidang.value, 0.4),
           };
         },
       };

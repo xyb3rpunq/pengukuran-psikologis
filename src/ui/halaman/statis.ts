@@ -47,7 +47,7 @@ export function halamanBeranda(): HTMLElement {
       el(
         'div',
         { kelas: 'angka-baris' },
-        el('div', { kelas: 'angka-ringkas' }, el('strong', {}, '231'), el('span', {}, t('beranda.angkaUji'))),
+        el('div', { kelas: 'angka-ringkas' }, el('strong', {}, '237'), el('span', {}, t('beranda.angkaUji'))),
         el('div', { kelas: 'angka-ringkas' }, el('strong', {}, '30+'), el('span', {}, t('beranda.angkaRumus'))),
         el('div', { kelas: 'angka-ringkas' }, el('strong', {}, String(SESI.length)), el('span', {}, t('beranda.angkaSesi'))),
         el('div', { kelas: 'angka-ringkas' }, el('strong', {}, '0'), el('span', {}, t('beranda.angkaJaringan'))),

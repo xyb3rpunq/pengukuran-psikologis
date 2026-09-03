@@ -177,3 +177,24 @@ export function bacaBerkas(isi: string): BerkasTerbaca {
     namaKolom: adaKepala ? sel.join(', ') : undefined,
   };
 }
+
+/**
+ * Baca satu bidang yang isinya SATU angka.
+ *
+ * Ini bukan kemudahan, melainkan perbaikan atas cacat yang nyata. Bidang satu
+ * angka sebelumnya dibaca dengan bacaDeret(), yang memperlakukan koma sebagai
+ * pemisah kolom karena memang itu tugasnya pada data tabel. Akibatnya "0,30"
+ * terbaca sebagai dua angka, 0 dan 30, lalu yang diambil angka pertamanya —
+ * dan ambang gugur 0,30 diam-diam menjadi 0,00. Tidak ada galat, tidak ada
+ * bidang merah; hanya seluruh butir yang tiba-tiba lolos.
+ *
+ * Di bidang satu angka, koma tidak pernah berarti pemisah. Ia selalu desimal.
+ */
+export function bacaAngka(teks: string, bawaan?: number): number {
+  const bersih = teks.trim();
+  if (bersih === '') {
+    if (bawaan !== undefined) return bawaan;
+    throw new RalatMasukan('data.kosong');
+  }
+  return keAngka(bersih);
+}

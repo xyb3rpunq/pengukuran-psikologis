@@ -18,7 +18,14 @@ import {
   tabel,
   zonaImpor,
 } from '../komponen';
-import { bacaDeret, bacaFavorable, bacaLabel, bacaMatriks, matriksKeTeks } from '../masukan';
+import {
+  bacaAngka,
+  bacaDeret,
+  bacaFavorable,
+  bacaLabel,
+  bacaMatriks,
+  matriksKeTeks,
+} from '../masukan';
 import { bangunKalkulator, type KonteksKalkulator } from '../kerangka';
 import {
   batangKoefisien,
@@ -534,8 +541,8 @@ export function halamanThurstone(konteks: KonteksKalkulator): HTMLElement {
         baca: () => ({
           matriks: bacaMatriks(data.bidang.value),
           namaKolom: bacaLabel(nama.bidang.value),
-          kategori: bacaDeret(skala.bidang.value)[0] ?? 11,
-          maksimal: bacaDeret(jumlah.bidang.value)[0] ?? 8,
+          kategori: bacaAngka(skala.bidang.value, 11),
+          maksimal: bacaAngka(jumlah.bidang.value, 8),
         }),
       };
     },
@@ -892,8 +899,8 @@ export function halamanTabelR(konteks: KonteksKalkulator): HTMLElement {
       return {
         simpul: el('div', { kelas: 'panel-isi' }, dari.pembungkus, sampai.pembungkus),
         baca: () => ({
-          nMin: bacaDeret(dari.bidang.value)[0] ?? 3,
-          nMaks: bacaDeret(sampai.bidang.value)[0] ?? 100,
+          nMin: bacaAngka(dari.bidang.value, 3),
+          nMaks: bacaAngka(sampai.bidang.value, 100),
         }),
       };
     },

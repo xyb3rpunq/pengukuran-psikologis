@@ -269,3 +269,43 @@ describe('impor berkas CSV', () => {
     ]);
   });
 });
+
+describe('bidang satu angka', () => {
+  it('membaca koma sebagai desimal, bukan pemisah', async () => {
+    // Cacat yang pernah nyata: bacaDeret("0,30") memulangkan [0, 30] dan
+    // ambang gugur 0,30 diam-diam menjadi 0,00 tanpa satu pun pesan galat.
+    const { bacaAngka } = await import('../src/ui/masukan');
+    expect(bacaAngka('0,30')).toBe(0.3);
+    expect(bacaAngka('0,40')).toBe(0.4);
+    expect(bacaAngka('1,96')).toBe(1.96);
+  });
+
+  it('juga membaca titik sebagai desimal', async () => {
+    const { bacaAngka } = await import('../src/ui/masukan');
+    expect(bacaAngka('0.30')).toBe(0.3);
+    expect(bacaAngka('11')).toBe(11);
+  });
+
+  it('memakai nilai bawaan bila bidangnya kosong', async () => {
+    const { bacaAngka } = await import('../src/ui/masukan');
+    expect(bacaAngka('', 5)).toBe(5);
+    expect(bacaAngka('   ', 0.4)).toBe(0.4);
+  });
+
+  it('menolak bidang kosong bila tidak ada bawaan', async () => {
+    const { bacaAngka } = await import('../src/ui/masukan');
+    expect(() => bacaAngka('')).toThrow();
+  });
+
+  it('menolak isi yang bukan angka', async () => {
+    const { bacaAngka } = await import('../src/ui/masukan');
+    expect(() => bacaAngka('dua koma lima')).toThrow();
+  });
+
+  it('berbeda dari bacaDeret justru pada kasus yang menjadi cacatnya', async () => {
+    const { bacaAngka, bacaDeret } = await import('../src/ui/masukan');
+    // Perbedaan inilah alasan kedua fungsi ini ada terpisah.
+    expect(bacaDeret('0,30')).toEqual([0, 30]);
+    expect(bacaAngka('0,30')).toBe(0.3);
+  });
+});
