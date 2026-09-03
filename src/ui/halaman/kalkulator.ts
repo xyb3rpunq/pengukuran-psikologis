@@ -99,8 +99,14 @@ export function halamanAitem(konteks: KonteksKalkulator): HTMLElement {
           },
         ]),
         kartu(
-          'P × D',
+          t('aitem.judulPeta'),
           petaAitem(
+            {
+              judul: t('aitem.judulPeta'),
+              sumbuP: t('aitem.sumbuP'),
+              sumbuD: t('aitem.sumbuD'),
+              daerahLayak: t('aitem.daerahLayak'),
+            },
             hasil.butir.map((b) => ({ nama: b.aitem, p: b.p, d: b.d, layak: b.layak })),
           ),
         ),
@@ -222,8 +228,9 @@ export function halamanValiditas(konteks: KonteksKalkulator): HTMLElement {
           },
         ]),
         kartu(
-          `r ${t('umum.butir').toLowerCase()}`,
+          t('validitas.judulGrafik'),
           batangKoefisien(
+            t('validitas.judulGrafik'),
             hasil.butir.map((b) => ({
               label: b.aitem,
               nilai: b.rHitung,
@@ -310,8 +317,8 @@ export function halamanReliabilitas(konteks: KonteksKalkulator): HTMLElement {
           { label: t('umum.responden'), nilai: bulat(hasil.n) },
         ]),
         kartu(
-          t('umum.hasil'),
-          batangKoefisien([
+          t('reliabilitas.judulPerbandingan'),
+          batangKoefisien(t('reliabilitas.judulPerbandingan'), [
             { label: t('reliabilitas.alpha'), nilai: hasil.alphaCronbach, ambang: 0.7 },
             { label: t('reliabilitas.kr20'), nilai: hasil.kr20, ambang: 0.7 },
             { label: t('reliabilitas.kr21'), nilai: hasil.kr21, ambang: 0.7 },
@@ -322,8 +329,9 @@ export function halamanReliabilitas(konteks: KonteksKalkulator): HTMLElement {
           catatan(t('reliabilitas.catatanSem')),
         ),
         kartu(
-          t('reliabilitas.belahGanjilGenap'),
+          t('reliabilitas.judulSebaranBelahan'),
           pencar(
+            t('reliabilitas.judulSebaranBelahan'),
             hasil.belahGanjilGenap.skorKiri,
             hasil.belahGanjilGenap.skorKanan,
             `${t('umum.butir')} 1, 3, 5…`,
@@ -425,9 +433,19 @@ export function halamanSkor(konteks: KonteksKalkulator): HTMLElement {
           { label: 'M', nilai: angka(r.rerata, 2) },
           { label: masukan.populasi ? 'σ' : 's', nilai: angka(masukan.populasi ? r.sbPopulasi : r.sbSampel, 2) },
           { label: 'Md', nilai: angka(r.median, 2) },
-          { label: 'Min–Maks', nilai: `${bulat(r.minimum)}–${bulat(r.maksimum)}` },
+          { label: t('umum.minMaks'), nilai: `${bulat(r.minimum)}–${bulat(r.maksimum)}` },
         ]),
-        kartu(t('skor.judul'), kurvaNormal(penanda)),
+        kartu(
+          t('skor.judulKurva'),
+          kurvaNormal(
+            {
+              judul: t('skor.judulKurva'),
+              stanine: t('skor.barisStanine'),
+              persentil: t('skor.barisPersentil'),
+            },
+            penanda,
+          ),
+        ),
         kartu(
           t('umum.hasil'),
           tabel(
@@ -514,14 +532,15 @@ export function halamanThurstone(konteks: KonteksKalkulator): HTMLElement {
         'div',
         { kelas: 'tumpuk' },
         papanAngka([
-          { label: 'Penilai', nilai: bulat(hasil.banyakPenilai) },
+          { label: t('umum.penilai'), nilai: bulat(hasil.banyakPenilai) },
           { label: t('umum.butir'), nilai: bulat(hasil.banyakButir) },
           { label: t('thurstone.terpilih'), nilai: bulat(terpilih.terpilih), nada: 'baik' },
           { label: t('thurstone.lokasiTerwakili'), nilai: bulat(terpilih.lokasiTerwakili) },
         ]),
         kartu(
-          t('thurstone.judul'),
+          t('thurstone.judulKontinum'),
           kontinumThurstone(
+            { judul: t('thurstone.judulKontinum'), sumbu: t('thurstone.sumbuS') },
             hasil.butir.map((b) => ({
               nama: b.butir,
               s: b.s,
@@ -621,6 +640,7 @@ export function halamanGuttman(konteks: KonteksKalkulator): HTMLElement {
         kartu(
           t('guttman.judulSkalogram'),
           petaSkalogram(
+            t('guttman.judulSkalogram'),
             hasil.skalogram,
             hasil.namaButir,
             hasil.responden.map((r) => r.responden),
@@ -751,8 +771,13 @@ export function halamanLikert(konteks: KonteksKalkulator): HTMLElement {
           { label: t('reliabilitas.rerataTotal'), nilai: angka(hasil.rerataTotal, 2) },
         ]),
         kartu(
-          t('umum.data'),
-          batangLikert(masukan.matriks, hasil.butir.map((b) => b.butir), masukan.kategori),
+          t('likert.judulSebaran'),
+          batangLikert(
+            t('likert.judulSebaran'),
+            masukan.matriks,
+            hasil.butir.map((b) => b.butir),
+            masukan.kategori,
+          ),
         ),
         kartu(
           t('umum.butir'),

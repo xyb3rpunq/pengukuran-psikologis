@@ -43,13 +43,24 @@ export function halamanBeranda(): HTMLElement {
       el(
         'div',
         { kelas: 'angka-baris' },
-        el('div', { kelas: 'angka-ringkas' }, el('strong', {}, '151'), el('span', {}, t('beranda.angkaUji'))),
+        el('div', { kelas: 'angka-ringkas' }, el('strong', {}, '158'), el('span', {}, t('beranda.angkaUji'))),
         el('div', { kelas: 'angka-ringkas' }, el('strong', {}, '30+'), el('span', {}, t('beranda.angkaRumus'))),
         el('div', { kelas: 'angka-ringkas' }, el('strong', {}, String(SESI.length)), el('span', {}, t('beranda.angkaSesi'))),
         el('div', { kelas: 'angka-ringkas' }, el('strong', {}, '0'), el('span', {}, t('beranda.angkaJaringan'))),
       ),
     ),
-    el('div', { kelas: 'bingkai-visual sorot' }, kurvaNormal([{ z: 1, label: 'z 1 · T 60' }])),
+    el(
+      'div',
+      { kelas: 'bingkai-visual sorot' },
+      kurvaNormal(
+        {
+          judul: t('skor.judulKurva'),
+          stanine: t('skor.barisStanine'),
+          persentil: t('skor.barisPersentil'),
+        },
+        [{ z: 1, label: 'z 1 · T 60' }],
+      ),
+    ),
     el(
       'div',
       { kelas: 'kisi-pintu' },

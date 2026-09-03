@@ -13,7 +13,7 @@ Setiap rumus di modul **PSI307** ditulis ulang sebagai kode **R**, dijalankan di
 [![CI](https://github.com/xyb3rpunq/pengukuran-psikologis/actions/workflows/ci.yml/badge.svg)](https://github.com/xyb3rpunq/pengukuran-psikologis/actions/workflows/ci.yml)
 [![Deploy](https://github.com/xyb3rpunq/pengukuran-psikologis/actions/workflows/deploy.yml/badge.svg)](https://github.com/xyb3rpunq/pengukuran-psikologis/actions/workflows/deploy.yml)
 [![R](https://img.shields.io/badge/R-4.6.0%20di%20peramban-276DC3?logo=r&logoColor=white)](https://docs.r-wasm.org/webr/latest/)
-[![Uji](https://img.shields.io/badge/uji-151%20lulus-3fb950)](uji/)
+[![Uji](https://img.shields.io/badge/uji-158%20lulus-3fb950)](uji/)
 [![Konformansi](https://img.shields.io/badge/konformansi-numpy%20%2B%20scipy-4dd4c8)](conformance/)
 [![Bahasa](https://img.shields.io/badge/bahasa-ID%20%2B%20EN-7c6cf0)](src/i18n/kamus.ts)
 [![Lisensi](https://img.shields.io/badge/lisensi-MIT-blue)](LICENSE)
@@ -66,6 +66,8 @@ Yang membuatnya bisa dijalankan tanpa memasang apa pun adalah **WebR** — R 4.6
 
 **Modul memakai dua metode berbeda untuk S dan Q.** Sesi 9 memberi rumus interpolasi data terkelompok. Sesi 10 menyuruh memakai kuartil SPSS. Keduanya berbeda hasil, dan modul memberi petunjuk siapa yang benar untuk Q: ia menyebut Q sama dengan nol bila semua penilai sepakat. Interpolasi terkelompok memberi 0,5 pada keadaan itu; kuartil SPSS memberi 0. Mesin ini memakai keduanya sesuai tempatnya dan menampilkan selisihnya di kolom terpisah.
 
+**Kalimat yang tidak pernah ikut berganti bahasa.** Uji kebocoran dwibahasa merender setiap halaman di DOM sungguhan dalam kedua bahasa, lalu mengurangkan seluruh isi kamus dari teks yang muncul; apa pun yang tersisa adalah kalimat yang ditulis di tempat salah. Cara itu menangkap tiga hal yang lolos dari pemeriksaan biasa: label `Min-Maks` dan `Penilai` yang tetap Indonesia di mode Inggris, seluruh `<title>` dan `aria-label` di dalam SVG — satu-satunya bentuk gambar bagi pembaca layar — dan anotasi di dalam rumus seperti `n = butir × responden`. Memeriksa kelengkapan kunci kamus tidak akan menemukan satu pun dari ketiganya.
+
 **Bug WebR di Node untuk Windows.** WebR memuat runtime R dengan `import(path.resolve(berkas))`. Di Windows hasilnya berawalan huruf kandar dan pemuat ESM Node menolaknya. [`scripts/tambal-webr.mjs`](scripts/tambal-webr.mjs) menambal satu ekspresi itu, hanya di Windows, secara idempoten.
 
 ### Kinerja
@@ -85,7 +87,7 @@ Runtime R berukuran 46 MB, dan situs yang menunggunya sebelum menggambar apa pun
 
 ```bash
 npm install
-npm test          # 151 uji, menjalankan berkas R yang sama dengan situsnya
+npm test          # 158 uji, menjalankan berkas R yang sama dengan situsnya
 npm run periksa   # tsc --noEmit
 npm run dev       # pengembangan
 npm run build     # tipe, bundel, salin runtime R ke dist/webr
@@ -105,7 +107,7 @@ python conformance/referensi.py
 | `src/mesin/` | Jembatan ke WebR: penulis literal, permukaan bertipe, pemetaan galat |
 | `src/ui/` | Cangkang tanpa kerangka kerja, komponen, dan pustaka visualisasi SVG |
 | `src/i18n/` | Kamus dwibahasa — satu-satunya tempat kalimat berbahasa manusia |
-| `uji/` | 151 uji, dijalankan Vitest lewat WebR di Node |
+| `uji/` | 158 uji, dijalankan Vitest lewat WebR di Node |
 | `conformance/` | Implementasi pembanding numpy dan scipy, beserta vektor emasnya |
 
 ### Catatan hak cipta
@@ -144,6 +146,8 @@ What makes it run without installing anything is **WebR** — R 4.6.0 compiled t
 
 **The module uses two different methods for S and Q.** Session 9 gives a grouped-data interpolation formula. Session 10 says to use SPSS quartiles. They disagree, and the module hints which is right for Q: it states Q equals zero when all judges agree. Grouped interpolation gives 0.5 there; SPSS quartiles give 0. The engine uses each where it belongs and shows the gap in a separate column.
 
+**Sentences that never changed language.** The bilingual leak test renders every page in a real DOM in both languages, then subtracts the entire dictionary from the text that appears; whatever remains was written in the wrong place. That caught three things an ordinary check misses: the labels `Min-Maks` and `Penilai` still in Indonesian under English, every `<title>` and `aria-label` inside the SVGs — the only form those charts take for a screen reader — and the annotations inside formulas such as `n = items × respondents`. Verifying that dictionary keys match would have found none of them.
+
 **A WebR bug on Node for Windows.** WebR loads the R runtime via `import(path.resolve(file))`. On Windows the result starts with a drive letter and the Node ESM loader refuses it. [`scripts/tambal-webr.mjs`](scripts/tambal-webr.mjs) patches that one expression, on Windows only, idempotently.
 
 ### Performance
@@ -154,7 +158,7 @@ The R runtime is 46 MB, and a site that waits for it before drawing anything sit
 
 ```bash
 npm install
-npm test          # 151 tests, running the same R files as the site
+npm test          # 158 tests, running the same R files as the site
 npm run periksa   # tsc --noEmit
 npm run dev
 npm run build

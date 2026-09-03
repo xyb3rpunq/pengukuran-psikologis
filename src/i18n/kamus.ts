@@ -1,3 +1,5 @@
+import { modulEn, modulId } from './modul-kamus';
+
 /**
  * Kamus dwibahasa.
  *
@@ -62,6 +64,8 @@ export const id = {
     rumus: 'Rumus',
     acuan: 'Acuan',
     pengaturan: 'Pengaturan',
+    minMaks: 'Min-Maks',
+    penilai: 'Penilai',
   },
   masukan: {
     judulMatriks: 'Matriks respons',
@@ -163,6 +167,10 @@ export const id = {
     ringkasKelompok: 'Kelompok ekstrem',
     ringkasTiapKelompok: 'Peserta tiap kelompok',
     ringkasRerata: 'Rerata skor total',
+    judulPeta: 'Peta taraf kesukaran terhadap daya pembeda',
+    sumbuP: 'P — taraf kesukaran',
+    sumbuD: 'D — daya pembeda',
+    daerahLayak: 'layak',
   },
   validitas: {
     judul: 'Validitas alat ukur',
@@ -178,6 +186,7 @@ export const id = {
     ringkasRTabel: 'r tabel',
     valid: 'Valid',
     gugur: 'Gugur',
+    judulGrafik: 'Korelasi setiap butir terhadap r tabel',
   },
   reliabilitas: {
     judul: 'Reliabilitas alat ukur',
@@ -199,6 +208,8 @@ export const id = {
     kolomKorelasi: 'r aitem-total',
     kolomAlphaBuang: 'Alpha bila dibuang',
     catatanDikotomi: 'KR-20 dan KR-21 hanya berlaku untuk data dikotomi.',
+    judulPerbandingan: 'Perbandingan antar metode',
+    judulSebaranBelahan: 'Sebaran kedua belahan',
     catatanSem:
       'Skor amatan seseorang berada kira-kira dalam rentang plus minus 1,96 SEM ' +
       'dari skor sejatinya pada keyakinan 95 persen.',
@@ -214,6 +225,9 @@ export const id = {
     kolomT: 'T',
     kolomStanine: 'Stanine',
     kolomPersentil: 'Jenjang persentil',
+    judulKurva: 'Kedudukan peserta pada kurva normal',
+    barisStanine: 'stanine',
+    barisPersentil: 'persentil',
   },
   thurstone: {
     judul: 'Skala Thurstone',
@@ -229,6 +243,8 @@ export const id = {
     terpilih: 'Butir terpilih',
     lokasiTerwakili: 'Lokasi terwakili',
     judulTerpilih: 'Butir yang dipilih untuk skala akhir',
+    judulKontinum: 'Lokasi butir pada kontinum',
+    sumbuS: 'nilai skala S — makin ke kanan makin favorabel',
     catatanDuaMetode:
       'S memakai rumus interpolasi data terkelompok dari sesi 9; Q memakai ' +
       'persentil gaya SPSS dari sesi 10. Modulnya memang memakai dua metode ' +
@@ -275,6 +291,7 @@ export const id = {
     kolomKategori: 'Kategori',
     favorable: 'Favorable',
     unfavorable: 'Unfavorable',
+    judulSebaran: 'Sebaran pilihan jawaban',
     catatanOrdinal:
       'Respons Likert berskala ordinal. Menjumlahkannya mengandaikan jarak ' +
       'antar pilihan sama besar — andaian yang tidak dijamin datanya. Kolom rho ' +
@@ -301,6 +318,10 @@ export const id = {
       'disertakan karena hak ciptanya ada pada penyusunnya.',
     alatTerkait: 'Alat terkait',
     tidakAdaAlat: 'Sesi teori, tanpa alat hitung.',
+    judulBanding: 'Dua hal yang dipertentangkan',
+    judulAlur: 'Urutan langkah',
+    judulPencar: 'Hubungan dua deret skor',
+    judulTangga: 'Empat tingkat skala pengukuran',
   },
   metode: {
     judul: 'Bagaimana angka-angka ini dipertanggungjawabkan',
@@ -418,6 +439,8 @@ export const en: Cermin<Kamus> = {
     rumus: 'Formula',
     acuan: 'Source',
     pengaturan: 'Options',
+    minMaks: 'Min-Max',
+    penilai: 'Judges',
   },
   masukan: {
     judulMatriks: 'Response matrix',
@@ -521,6 +544,10 @@ export const en: Cermin<Kamus> = {
     ringkasKelompok: 'Extreme groups',
     ringkasTiapKelompok: 'Participants per group',
     ringkasRerata: 'Mean total score',
+    judulPeta: 'Difficulty against discrimination',
+    sumbuP: 'P — difficulty',
+    sumbuD: 'D — discrimination',
+    daerahLayak: 'keep',
   },
   validitas: {
     judul: 'Instrument validity',
@@ -536,6 +563,7 @@ export const en: Cermin<Kamus> = {
     ringkasRTabel: 'Critical r',
     valid: 'Valid',
     gugur: 'Dropped',
+    judulGrafik: 'Each item correlation against the critical r',
   },
   reliabilitas: {
     judul: 'Instrument reliability',
@@ -557,6 +585,8 @@ export const en: Cermin<Kamus> = {
     kolomKorelasi: 'Item-total r',
     kolomAlphaBuang: 'Alpha if dropped',
     catatanDikotomi: 'KR-20 and KR-21 apply to dichotomous data only.',
+    judulPerbandingan: 'Methods compared',
+    judulSebaranBelahan: 'The two halves plotted',
     catatanSem:
       'A person observed score sits roughly within plus or minus 1.96 SEM of ' +
       'their true score at 95 percent confidence.',
@@ -572,6 +602,9 @@ export const en: Cermin<Kamus> = {
     kolomT: 'T',
     kolomStanine: 'Stanine',
     kolomPersentil: 'Percentile rank',
+    judulKurva: 'Where each participant falls on the normal curve',
+    barisStanine: 'stanine',
+    barisPersentil: 'percentile',
   },
   thurstone: {
     judul: 'Thurstone scale',
@@ -587,6 +620,8 @@ export const en: Cermin<Kamus> = {
     terpilih: 'Items selected',
     lokasiTerwakili: 'Locations covered',
     judulTerpilih: 'Items chosen for the final scale',
+    judulKontinum: 'Item locations on the continuum',
+    sumbuS: 'scale value S — further right is more favorable',
     catatanDuaMetode:
       'S uses the grouped-data interpolation formula from session 9; Q uses the ' +
       'SPSS-style percentiles from session 10. The module really does use two ' +
@@ -633,6 +668,7 @@ export const en: Cermin<Kamus> = {
     kolomKategori: 'Category',
     favorable: 'Favorable',
     unfavorable: 'Unfavorable',
+    judulSebaran: 'Response distribution',
     catatanOrdinal:
       'Likert responses are ordinal. Summing them assumes the gaps between ' +
       'options are equal — an assumption the data does not guarantee. The ' +
@@ -659,6 +695,10 @@ export const en: Cermin<Kamus> = {
       'not included, because their copyright belongs to their author.',
     alatTerkait: 'Related tool',
     tidakAdaAlat: 'A theory session, with no calculator.',
+    judulBanding: 'Two things set against each other',
+    judulAlur: 'The order of steps',
+    judulPencar: 'How two score series relate',
+    judulTangga: 'The four levels of measurement',
   },
   metode: {
     judul: 'How these numbers are held accountable',
@@ -716,5 +756,17 @@ export const en: Cermin<Kamus> = {
   },
 };
 
-export const kamus = { id, en } as const;
+/**
+ * Kamus lengkap: bagian inti digabung dengan bagian isi modul.
+ *
+ * Digabung di sini, bukan di tempat pemakaian, supaya hanya ada SATU objek
+ * yang perlu ditelusuri uji kebocoran bahasa. Kalau ada kalimat yang tidak
+ * bisa ditemukan di objek ini, kalimat itu ditulis di tempat yang salah.
+ */
+export const kamus = {
+  id: { ...id, ...modulId },
+  en: { ...en, ...modulEn },
+} as const;
+
 export type KodeBahasa = keyof typeof kamus;
+export type KamusPenuh = (typeof kamus)['id'];

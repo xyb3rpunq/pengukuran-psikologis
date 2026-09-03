@@ -3,13 +3,16 @@
  *
  * Empat belas sesi, masing-masing dengan satu gambar. Halaman ini sengaja
  * tidak menyentuh mesin R sama sekali: seluruh gambarnya dirakit dari angka
- * yang sudah ditetapkan di sini, sehingga halaman terbuka seketika bahkan
+ * yang sudah ditetapkan di berkas, sehingga halaman terbuka seketika bahkan
  * sebelum runtime R selesai diunduh di latar belakang.
+ *
+ * Setiap kalimat di sini datang dari kamus lewat t(). Tidak ada satu pun
+ * string berbahasa manusia yang ditulis langsung di berkas ini.
  */
 import { el } from '../dom';
-import { bahasa, t } from '../../i18n';
+import { t } from '../../i18n';
 import { SESI, type Sesi } from '../../data/modul';
-import { SKALA_LIKERT, NAMA_BUTIR_LIKERT } from '../../data/contoh';
+import { NAMA_BUTIR_LIKERT, SKALA_LIKERT } from '../../data/contoh';
 import {
   alurLangkah,
   batangKoefisien,
@@ -32,7 +35,7 @@ const SKALOGRAM_RAPI: readonly (readonly number[])[] = [
   [0, 0, 0, 0, 0],
 ];
 
-/** Scalogram yang sama, tapi dua responden menyimpang dari polanya. */
+/** Scalogram yang sama, tapi tiga responden menyimpang dari polanya. */
 const SKALOGRAM_MENYIMPANG: readonly (readonly number[])[] = [
   [1, 1, 1, 1, 1],
   [1, 1, 1, 0, 1],
@@ -56,143 +59,149 @@ const BUTIR_THURSTONE_TELADAN = [
   { nama: 'T7', s: 9.7, k25: 5.2, k75: 11.0, terpilih: false },
 ];
 
-/** Skor belahan ganjil dan genap dari satu tes teladan, untuk sesi 6. */
+/** Skor belahan ganjil dan genap dari satu tes teladan, untuk sesi 5. */
 const BELAH_GANJIL = [5, 4, 5, 4, 3, 4, 3, 3, 2, 3, 2, 2, 1, 2, 1, 1];
 const BELAH_GENAP = [5, 5, 4, 3, 4, 3, 2, 3, 3, 2, 1, 2, 2, 1, 1, 0];
 
+/** Koefisien teladan sesi 6 — dua pembelahan yang sengaja berbeda hasilnya. */
+const KOEFISIEN_TELADAN = [0.82, 0.74, 0.79, 0.79];
+
 function gambarSesi(nomor: number): SVGElement | null {
-  const id = bahasa() === 'id';
   switch (nomor) {
     case 1:
       return duaKolom(
-        { judul: id ? 'Tes' : 'Test', butir: id
-          ? ['Mengungkap atribut psikologis', 'Tidak ada nilai lulus', 'Ditafsirkan lewat norma', 'Dibakukan prosedurnya']
-          : ['Reveals a psychological attribute', 'No pass mark', 'Interpreted against norms', 'Standardised procedure'] },
-        { judul: id ? 'Ujian' : 'Examination', butir: id
-          ? ['Mengukur penguasaan materi', 'Ada nilai lulus', 'Ditafsirkan lewat patokan', 'Prosedurnya bisa berubah']
-          : ['Measures mastery of material', 'Has a pass mark', 'Interpreted against a criterion', 'Procedure may vary'] },
+        t('modul.judulBanding'),
+        {
+          judul: t('diagram.s1.kiriJudul'),
+          butir: [
+            t('diagram.s1.kiri1'),
+            t('diagram.s1.kiri2'),
+            t('diagram.s1.kiri3'),
+            t('diagram.s1.kiri4'),
+          ],
+        },
+        {
+          judul: t('diagram.s1.kananJudul'),
+          butir: [
+            t('diagram.s1.kanan1'),
+            t('diagram.s1.kanan2'),
+            t('diagram.s1.kanan3'),
+            t('diagram.s1.kanan4'),
+          ],
+        },
       );
     case 2:
-      return alurLangkah(
-        id
-          ? [
-              'Rumuskan konstruk dari kajian teori',
-              'Turunkan dimensi dan indikator perilaku',
-              'Susun kisi-kisi alat ukur',
-              'Tulis butir favorable dan unfavorable',
-              'Uji coba pada sampel awal',
-              'Analisis butir, validitas, reliabilitas',
-              'Revisi dan uji coba final',
-              'Susun manual dan norma',
-            ]
-          : [
-              'Define the construct from theory',
-              'Derive dimensions and behavioural indicators',
-              'Build the instrument blueprint',
-              'Write favorable and unfavorable items',
-              'Pilot on an initial sample',
-              'Analyse items, validity, reliability',
-              'Revise and run a final pilot',
-              'Write the manual and norms',
-            ],
-      );
+      return alurLangkah(t('modul.judulAlur'), [
+        t('diagram.s2.l1'),
+        t('diagram.s2.l2'),
+        t('diagram.s2.l3'),
+        t('diagram.s2.l4'),
+        t('diagram.s2.l5'),
+        t('diagram.s2.l6'),
+        t('diagram.s2.l7'),
+        t('diagram.s2.l8'),
+      ]);
     case 3:
-      return alurLangkah(
-        id
-          ? [
-              'Kognitif — pengetahuan dan penalaran',
-              'Afektif — sikap, minat, nilai',
-              'Psikomotor — keterampilan bertindak',
-              'Tes prestasi mengacu pada tujuan instruksional',
-            ]
-          : [
-              'Cognitive — knowledge and reasoning',
-              'Affective — attitude, interest, values',
-              'Psychomotor — skill in action',
-              'Achievement tests refer back to instructional goals',
-            ],
-      );
+      return alurLangkah(t('modul.judulAlur'), [
+        t('diagram.s3.l1'),
+        t('diagram.s3.l2'),
+        t('diagram.s3.l3'),
+        t('diagram.s3.l4'),
+      ]);
     case 4:
-      return alurLangkah(
-        id
-          ? [
-              'Tegaskan tujuan dan kawasan ukur',
-              'Uraikan komponen isi materi',
-              'Tetapkan taraf kesukaran yang dituju',
-              'Tulis butir, telaah kualitatif oleh ahli',
-              'Rakit untuk uji coba',
-            ]
-          : [
-              'Fix the purpose and measurement domain',
-              'Lay out the content components',
-              'Set the difficulty level aimed at',
-              'Write items, expert qualitative review',
-              'Assemble for piloting',
-            ],
-      );
+      return alurLangkah(t('modul.judulAlur'), [
+        t('diagram.s4.l1'),
+        t('diagram.s4.l2'),
+        t('diagram.s4.l3'),
+        t('diagram.s4.l4'),
+        t('diagram.s4.l5'),
+      ]);
     case 5:
       return pencar(
+        t('modul.judulPencar'),
         BELAH_GANJIL,
         BELAH_GENAP,
-        id ? 'skor butir' : 'item score',
-        id ? 'skor total' : 'total score',
+        t('diagram.s5.sumbuX'),
+        t('diagram.s5.sumbuY'),
       );
     case 6:
-      return batangKoefisien([
-        { label: id ? 'Belah ganjil-genap' : 'Odd-even split', nilai: 0.82, ambang: 0.7 },
-        { label: id ? 'Belah awal-akhir' : 'First-second split', nilai: 0.74, ambang: 0.7 },
-        { label: 'KR-20', nilai: 0.79, ambang: 0.7 },
-        { label: id ? 'Alpha Cronbach' : 'Cronbach alpha', nilai: 0.79, ambang: 0.7 },
+      return batangKoefisien(t('reliabilitas.judulPerbandingan'), [
+        { label: t('diagram.s6.b1'), nilai: KOEFISIEN_TELADAN[0] as number, ambang: 0.7 },
+        { label: t('diagram.s6.b2'), nilai: KOEFISIEN_TELADAN[1] as number, ambang: 0.7 },
+        { label: t('diagram.s6.b3'), nilai: KOEFISIEN_TELADAN[2] as number, ambang: 0.7 },
+        { label: t('diagram.s6.b4'), nilai: KOEFISIEN_TELADAN[3] as number, ambang: 0.7 },
       ]);
     case 7:
-      return kurvaNormal([
-        { z: -1.5, label: 'T 35' },
-        { z: 0, label: 'T 50' },
-        { z: 1.5, label: 'T 65' },
-      ]);
+      return kurvaNormal(
+        {
+          judul: t('skor.judulKurva'),
+          stanine: t('skor.barisStanine'),
+          persentil: t('skor.barisPersentil'),
+        },
+        [
+          { z: -1.5, label: 'T 35' },
+          { z: 0, label: 'T 50' },
+          { z: 1.5, label: 'T 65' },
+        ],
+      );
     case 8:
       return duaKolom(
-        { judul: id ? 'Tes kognitif' : 'Cognitive test', butir: id
-          ? ['Performansi maksimal', 'Ada jawaban benar', 'Diberi batas waktu', 'Contoh: inteligensi, prestasi']
-          : ['Maximum performance', 'There is a right answer', 'Time limited', 'Example: intelligence, achievement'] },
-        { judul: id ? 'Tes non-kognitif' : 'Non-cognitive test', butir: id
-          ? ['Performansi tipikal', 'Tidak ada jawaban benar', 'Umumnya tanpa batas waktu', 'Contoh: sikap, kepribadian']
-          : ['Typical performance', 'No right answer', 'Usually untimed', 'Example: attitude, personality'] },
+        t('modul.judulBanding'),
+        {
+          judul: t('diagram.s8.kiriJudul'),
+          butir: [
+            t('diagram.s8.kiri1'),
+            t('diagram.s8.kiri2'),
+            t('diagram.s8.kiri3'),
+            t('diagram.s8.kiri4'),
+          ],
+        },
+        {
+          judul: t('diagram.s8.kananJudul'),
+          butir: [
+            t('diagram.s8.kanan1'),
+            t('diagram.s8.kanan2'),
+            t('diagram.s8.kanan3'),
+            t('diagram.s8.kanan4'),
+          ],
+        },
       );
     case 9:
     case 10:
-      return kontinumThurstone(BUTIR_THURSTONE_TELADAN);
-    case 11:
-      return petaSkalogram(SKALOGRAM_RAPI, BUTIR_LIMA, RESPONDEN_ENAM);
-    case 12:
-      return petaSkalogram(SKALOGRAM_MENYIMPANG, BUTIR_LIMA, RESPONDEN_ENAM);
-    case 13:
-      return null;
-    case 14:
-      return tanggaSkala(
-        id
-          ? [
-              { nama: 'Rasio', sifat: 'Punya nol mutlak — semua operasi hitung sah' },
-              { nama: 'Interval', sifat: 'Jarak antar nilai sama, nolnya sembarang' },
-              { nama: 'Ordinal', sifat: 'Ada urutan, jaraknya tidak diketahui' },
-              { nama: 'Nominal', sifat: 'Sekadar nama atau label, tanpa urutan' },
-            ]
-          : [
-              { nama: 'Ratio', sifat: 'Has an absolute zero — all arithmetic is valid' },
-              { nama: 'Interval', sifat: 'Equal spacing, but an arbitrary zero' },
-              { nama: 'Ordinal', sifat: 'Ordered, but the gaps are unknown' },
-              { nama: 'Nominal', sifat: 'Just a name or label, with no order' },
-            ],
+      return kontinumThurstone(
+        { judul: t('thurstone.judulKontinum'), sumbu: t('thurstone.sumbuS') },
+        BUTIR_THURSTONE_TELADAN,
       );
+    case 11:
+      return petaSkalogram(
+        t('guttman.judulSkalogram'),
+        SKALOGRAM_RAPI,
+        BUTIR_LIMA,
+        RESPONDEN_ENAM,
+      );
+    case 12:
+      return petaSkalogram(
+        t('guttman.judulSkalogram'),
+        SKALOGRAM_MENYIMPANG,
+        BUTIR_LIMA,
+        RESPONDEN_ENAM,
+      );
+    case 13:
+      // Sebaran jawaban contoh, dihitung langsung di JavaScript tanpa mesin R.
+      return batangLikert(t('likert.judulSebaran'), SKALA_LIKERT, NAMA_BUTIR_LIKERT, 5);
+    case 14:
+      return tanggaSkala(t('modul.judulTangga'), [
+        { nama: t('diagram.s14.n1'), sifat: t('diagram.s14.d1') },
+        { nama: t('diagram.s14.n2'), sifat: t('diagram.s14.d2') },
+        { nama: t('diagram.s14.n3'), sifat: t('diagram.s14.d3') },
+        { nama: t('diagram.s14.n4'), sifat: t('diagram.s14.d4') },
+      ]);
     default:
       return null;
   }
 }
 
 function kartuSesi(sesi: Sesi): HTMLElement {
-  const id = bahasa() === 'id';
-  const gambar = sesi.nomor === 13 ? null : gambarSesi(sesi.nomor);
-
   const isi = el(
     'article',
     { kelas: 'kartu-sesi' },
@@ -203,22 +212,14 @@ function kartuSesi(sesi: Sesi): HTMLElement {
       el(
         'div',
         {},
-        el('h2', {}, id ? sesi.judulId : sesi.judulEn),
-        el('p', { kelas: 'ringkas' }, id ? sesi.ringkasId : sesi.ringkasEn),
+        el('h2', {}, t(`sesi.${sesi.kunci}.judul`)),
+        el('p', { kelas: 'ringkas' }, t(`sesi.${sesi.kunci}.ringkas`)),
       ),
     ),
   );
 
-  if (sesi.nomor === 13) {
-    // Sebaran jawaban contoh, dihitung langsung di JavaScript tanpa mesin R.
-    isi.appendChild(
-      el(
-        'div',
-        { kelas: 'bingkai-visual' },
-        batangLikert(SKALA_LIKERT, NAMA_BUTIR_LIKERT, 5),
-      ),
-    );
-  } else if (gambar !== null) {
+  const gambar = gambarSesi(sesi.nomor);
+  if (gambar !== null) {
     isi.appendChild(el('div', { kelas: 'bingkai-visual' }, gambar));
   }
 
@@ -228,18 +229,14 @@ function kartuSesi(sesi: Sesi): HTMLElement {
         'div',
         { kelas: 'blok-rumus' },
         el('span', { kelas: 'label-kecil' }, t('umum.rumus')),
-        ...sesi.rumus.map((baris) => el('code', { kelas: 'rumus' }, baris)),
+        ...sesi.rumus.map((kunci) => el('code', { kelas: 'rumus' }, t(`rumus.${kunci}`))),
       ),
     );
   }
 
   if (sesi.rute !== undefined) {
     isi.appendChild(
-      el(
-        'a',
-        { kelas: 'tautan-alat', href: sesi.rute },
-        `${t('modul.alatTerkait')} →`,
-      ),
+      el('a', { kelas: 'tautan-alat', href: sesi.rute }, `${t('modul.alatTerkait')} →`),
     );
   } else {
     isi.appendChild(el('p', { kelas: 'catatan' }, t('modul.tidakAdaAlat')));
