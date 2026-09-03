@@ -165,7 +165,10 @@ export function halamanFaktor(konteks: KonteksKalkulator): HTMLElement {
               { kunci: 'msa', judul: t('faktor.kolomMsa'), angka: true, nilai: (b) => angka(b.msa) },
               {
                 kunci: 'k',
-                judul: t('validitas.kolomKategori'),
+                // Kategori KMO mengikuti Kaiser (1974), bukan Guilford. Dua
+                // pembagian yang berbeda, dan menyebut yang salah membuat
+                // pembaca mencari ambangnya di tempat yang tidak memuatnya.
+                judul: t('faktor.kolomKategori'),
                 nilai: (b) => namaKategori(b.kategori),
               },
               {
