@@ -13,7 +13,7 @@ Setiap rumus di modul **PSI307** ditulis ulang sebagai kode **R**, dijalankan di
 [![CI](https://github.com/xyb3rpunq/pengukuran-psikologis/actions/workflows/ci.yml/badge.svg)](https://github.com/xyb3rpunq/pengukuran-psikologis/actions/workflows/ci.yml)
 [![Deploy](https://github.com/xyb3rpunq/pengukuran-psikologis/actions/workflows/deploy.yml/badge.svg)](https://github.com/xyb3rpunq/pengukuran-psikologis/actions/workflows/deploy.yml)
 [![R](https://img.shields.io/badge/R-4.6.0%20di%20peramban-276DC3?logo=r&logoColor=white)](https://docs.r-wasm.org/webr/latest/)
-[![Uji](https://img.shields.io/badge/uji-208%20lulus-3fb950)](uji/)
+[![Uji](https://img.shields.io/badge/uji-210%20lulus-3fb950)](uji/)
 [![Konformansi](https://img.shields.io/badge/konformansi-numpy%20%2B%20scipy-4dd4c8)](conformance/)
 [![Bahasa](https://img.shields.io/badge/bahasa-ID%20%2B%20EN-7c6cf0)](src/i18n/kamus.ts)
 [![Lisensi](https://img.shields.io/badge/lisensi-MIT-blue)](LICENSE)
@@ -72,6 +72,8 @@ Yang membuatnya bisa dijalankan tanpa memasang apa pun adalah **WebR** — R 4.6
 
 **Perhitungan pertama yang tidak pernah terjadi di tab latar.** Hasil pertama tiap kalkulator dijadwalkan lewat `requestAnimationFrame`. Peramban tidak pernah menjalankan callback rAF pada tab yang tidak terlihat, jadi halaman yang dibuka di tab latar berhenti selamanya di "belum ada hasil" — dan pengguna baru menemukannya kosong saat berpindah ke tab itu. Tidak satu pun uji menangkapnya; yang menemukannya adalah membuka situs yang sudah terbit. Sekarang memakai `setTimeout`, yang tetap berjalan di tab latar, dan [`uji/kerangka.uji.ts`](uji/kerangka.uji.ts) menirukan keadaan itu dengan memasang rAF yang tidak pernah memanggil balik.
 
+**Dua ejaan untuk satu angka di layar yang sama.** Tabel memakai pemformat yang sadar bahasa, tetapi angka di dalam gambar SVG memakai `toFixed()` yang selalu menulis titik desimal. Dalam bahasa Indonesia, tabelnya menulis 73,5 sementara gambar tepat di atasnya menulis 73.5. Tidak ada satu kata pun yang salah, jadi uji kebocoran kata tidak menemukannya. Uji baru memeriksa SISA teks setelah seluruh kamus dikurangkan — yang tersisa hanya angka hasil hitungan — dan menuntut tidak ada titik desimal di render Indonesia maupun koma desimal di render Inggris.
+
 **Bug WebR di Node untuk Windows.** WebR memuat runtime R dengan `import(path.resolve(berkas))`. Di Windows hasilnya berawalan huruf kandar dan pemuat ESM Node menolaknya. [`scripts/tambal-webr.mjs`](scripts/tambal-webr.mjs) menambal satu ekspresi itu, hanya di Windows, secara idempoten.
 
 ### Kinerja
@@ -91,7 +93,7 @@ Runtime R berukuran 46 MB, dan situs yang menunggunya sebelum menggambar apa pun
 
 ```bash
 npm install
-npm test          # 208 uji, menjalankan berkas R yang sama dengan situsnya
+npm test          # 210 uji, menjalankan berkas R yang sama dengan situsnya
 npm run periksa   # tsc --noEmit
 npm run dev       # pengembangan
 npm run build     # tipe, bundel, salin runtime R ke dist/webr
@@ -111,7 +113,7 @@ python conformance/referensi.py
 | `src/mesin/` | Jembatan ke WebR: penulis literal, permukaan bertipe, pemetaan galat |
 | `src/ui/` | Cangkang tanpa kerangka kerja, komponen, dan pustaka visualisasi SVG |
 | `src/i18n/` | Kamus dwibahasa — satu-satunya tempat kalimat berbahasa manusia |
-| `uji/` | 208 uji, dijalankan Vitest lewat WebR di Node |
+| `uji/` | 210 uji, dijalankan Vitest lewat WebR di Node |
 | `conformance/` | Implementasi pembanding numpy dan scipy, beserta vektor emasnya |
 
 ### Catatan hak cipta
@@ -154,6 +156,8 @@ What makes it run without installing anything is **WebR** — R 4.6.0 compiled t
 
 **A first computation that never happened in a background tab.** Each calculator scheduled its first result through `requestAnimationFrame`. Browsers never run rAF callbacks in a tab that is not visible, so a page opened in a background tab sat forever on "no results yet" — and the user only found it empty on switching to that tab. No test caught it; opening the published site did. It now uses `setTimeout`, which still runs in background tabs, and [`uji/kerangka.uji.ts`](uji/kerangka.uji.ts) reproduces the condition with an rAF that never calls back.
 
+**Two spellings of one number on the same screen.** Tables used the language-aware formatter, but numbers inside the SVG charts used `toFixed()`, which always writes a decimal point. In Indonesian the table read 73,5 while the chart directly above it read 73.5. Not one word was wrong, so the word-leak test found nothing. A new test checks the RESIDUAL text after the whole dictionary is subtracted — what remains is only computed numbers — and requires no decimal points in the Indonesian render and no decimal commas in the English one.
+
 **A WebR bug on Node for Windows.** WebR loads the R runtime via `import(path.resolve(file))`. On Windows the result starts with a drive letter and the Node ESM loader refuses it. [`scripts/tambal-webr.mjs`](scripts/tambal-webr.mjs) patches that one expression, on Windows only, idempotently.
 
 ### Performance
@@ -164,7 +168,7 @@ The R runtime is 46 MB, and a site that waits for it before drawing anything sit
 
 ```bash
 npm install
-npm test          # 208 tests, running the same R files as the site
+npm test          # 210 tests, running the same R files as the site
 npm run periksa   # tsc --noEmit
 npm run dev
 npm run build

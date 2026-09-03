@@ -330,3 +330,62 @@ describe('render sungguhan dalam kedua bahasa', () => {
     expect(angka(0.8512, 3, 'en')).toBe('0.851');
   });
 });
+
+describe('kaidah angka mengikuti bahasanya', () => {
+  /**
+   * Cacat yang paling mudah lolos dari semua uji sebelumnya.
+   *
+   * Tabel memakai angka() yang sadar bahasa, sementara gambar SVG sempat
+   * memakai toFixed() yang selalu menulis titik desimal. Hasilnya satu layar
+   * memuat dua ejaan untuk angka yang sama: tabelnya menulis 73,5 dan gambar
+   * di atasnya menulis 73.5. Tidak ada kata yang salah, jadi uji kebocoran
+   * kata pun tidak menemukannya.
+   *
+   * Pemeriksaan dilakukan atas SISA teks setelah seluruh frasa kamus
+   * dikurangkan. Yang tersisa hanyalah angka hasil hitungan — dan di situlah
+   * titik desimal tidak boleh muncul saat bahasanya Indonesia. Nomor versi
+   * seperti "4.6.0" yang memang ditulis penulisnya ikut terkurangkan bersama
+   * kalimatnya, jadi tidak salah tertangkap.
+   */
+  it('render bahasa Indonesia tidak memuat satu pun desimal bertitik', () => {
+    pasangBahasa('id');
+    const frasa = frasaKamus('id');
+    const pelanggar: string[] = [];
+
+    for (const satu of halaman) {
+      let sisa = teksTerlihat(satu.bangun());
+      for (const potongan of frasa) {
+        if (potongan.length === 0) continue;
+        sisa = sisa.split(potongan).join(' ');
+      }
+      const bertitik = sisa.match(/\d+\.\d+/g);
+      if (bertitik !== null) {
+        for (const angkaSalah of bertitik) pelanggar.push(`${satu.nama}: ${angkaSalah}`);
+      }
+    }
+
+    expect([...new Set(pelanggar)]).toEqual([]);
+  });
+
+  it('render bahasa Inggris memakai titik desimal, bukan koma', () => {
+    pasangBahasa('en');
+    const frasa = frasaKamus('en');
+    const pelanggar: string[] = [];
+
+    for (const satu of halaman) {
+      let sisa = teksTerlihat(satu.bangun());
+      for (const potongan of frasa) {
+        if (potongan.length === 0) continue;
+        sisa = sisa.split(potongan).join(' ');
+      }
+      // Koma di antara dua angka hanya sah sebagai pemisah ribuan, dan data
+      // contoh di proyek ini tidak pernah mencapai empat digit.
+      const berkoma = sisa.match(/\d+,\d+/g);
+      if (berkoma !== null) {
+        for (const angkaSalah of berkoma) pelanggar.push(`${satu.nama}: ${angkaSalah}`);
+      }
+    }
+
+    expect([...new Set(pelanggar)]).toEqual([]);
+  });
+});

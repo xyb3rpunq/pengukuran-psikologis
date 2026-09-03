@@ -9,7 +9,15 @@
  *
  * Warna diambil dari variabel CSS, sehingga tema terang dan gelap bekerja
  * tanpa satu pun cabang di kode ini.
+ *
+ * Angka di dalam gambar diformat lewat angka() dari lapisan i18n, bukan lewat
+ * toFixed(). Keduanya terlihat sama sampai situsnya dibuka dalam bahasa
+ * Indonesia: toFixed selalu menulis titik desimal, sehingga tabel di bawah
+ * gambar menulis 73,5 sementara gambar di atasnya menulis 73.5 — dua ejaan
+ * untuk satu angka yang sama, di layar yang sama.
  */
+
+import { angka } from '../i18n';
 
 const NS = 'http://www.w3.org/2000/svg';
 
@@ -143,10 +151,10 @@ export function kurvaNormal(
     {
       y: dasar + 90,
       nama: teks.persentil,
-      nilai: (z) => {
-        const p = [0.1, 2.3, 15.9, 50, 84.1, 97.7, 99.9][z + 3] as number;
-        return String(p);
-      },
+      // Persentil pada tiap simpangan baku bulat, dari tabel sebaran normal.
+      // Diformat lewat angka() seperti angka lain, supaya barisnya tidak
+      // menulis 15.9 di halaman yang seluruh angkanya memakai koma.
+      nilai: (z) => angka([0.1, 2.3, 15.9, 50, 84.1, 97.7, 99.9][z + 3] as number, 1),
     },
   ];
 
@@ -196,7 +204,7 @@ export function pencar(
     const y = pad.atas + (i / 4) * (T - pad.atas - pad.bawah);
     svg.appendChild(s('line', { x1: pad.kiri, y1: y, x2: L - pad.kanan, y2: y, class: 'v-kisi' }));
     svg.appendChild(
-      label(pad.kiri - 8, y + 4, (maksY - (i / 4) * bentangY).toFixed(1), 'v-angka', 'end'),
+      label(pad.kiri - 8, y + 4, angka(maksY - (i / 4) * bentangY, 1), 'v-angka', 'end'),
     );
   }
 
@@ -302,7 +310,7 @@ export function petaAitem(
     svg.appendChild(
       s('line', { x1: keX(p), y1: pad.atas, x2: keX(p), y2: T - pad.bawah, class: 'v-kisi' }),
     );
-    svg.appendChild(label(keX(p), T - pad.bawah + 18, p.toFixed(1), 'v-angka'));
+    svg.appendChild(label(keX(p), T - pad.bawah + 18, angka(p, 1), 'v-angka'));
   }
   for (const d of [-0.4, 0, 0.2, 0.4, 0.7, 1]) {
     svg.appendChild(
@@ -314,7 +322,7 @@ export function petaAitem(
         class: d === 0 ? 'v-sumbu-nol' : 'v-kisi',
       }),
     );
-    svg.appendChild(label(pad.kiri - 8, keY(d) + 4, d.toFixed(1), 'v-angka', 'end'));
+    svg.appendChild(label(pad.kiri - 8, keY(d) + 4, angka(d, 1), 'v-angka', 'end'));
   }
 
   for (const satu of butir) {
@@ -513,7 +521,7 @@ export function batangKoefisien(
         class: memenuhi ? 'v-batang-baik-isi' : 'v-batang-buruk-isi',
       }),
     );
-    svg.appendChild(label(kanan + 6, y + 12, satu.nilai.toFixed(3), 'v-angka', 'start'));
+    svg.appendChild(label(kanan + 6, y + 12, angka(satu.nilai, 3), 'v-angka', 'start'));
     if (satu.ambang !== undefined) {
       svg.appendChild(
         s('line', { x1: keX(satu.ambang), y1: y - 5, x2: keX(satu.ambang), y2: y + 22, class: 'v-ambang' }),
@@ -705,7 +713,7 @@ export function screePlot(judul: string, sumbuY: string, titik: readonly TitikEi
     svg.appendChild(
       s('line', { x1: pad.kiri, y1: keY(nilai), x2: L - pad.kanan, y2: keY(nilai), class: 'v-kisi' }),
     );
-    svg.appendChild(label(pad.kiri - 8, keY(nilai) + 4, nilai.toFixed(1), 'v-angka', 'end'));
+    svg.appendChild(label(pad.kiri - 8, keY(nilai) + 4, angka(nilai, 1), 'v-angka', 'end'));
   }
 
   // Garis Kaiser: sebuah faktor layak dipertahankan hanya bila ia menjelaskan
@@ -804,7 +812,7 @@ export function petaMuatan(
         );
       }
       svg.appendChild(
-        label(x + lebarSel / 2, y + tinggiSel / 2 + 4, nilai.toFixed(2), 'v-muatan-teks'),
+        label(x + lebarSel / 2, y + tinggiSel / 2 + 4, angka(nilai, 2), 'v-muatan-teks'),
       );
     });
   });
@@ -888,6 +896,6 @@ export function termometerSus(
   svg.appendChild(
     s('circle', { cx: keX(skor), cy: yPita + tinggiPita / 2, r: 8, class: 'v-penunjuk' }),
   );
-  svg.appendChild(label(keX(skor), T - 14, skor.toFixed(1), 'v-penanda-label'));
+  svg.appendChild(label(keX(skor), T - 14, angka(skor, 1), 'v-penanda-label'));
   return svg;
 }
