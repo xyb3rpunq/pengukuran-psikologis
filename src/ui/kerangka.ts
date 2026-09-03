@@ -110,12 +110,16 @@ export function bangunKalkulator<M>(
 
   ganti(wadahHasil, el('div', { kelas: 'kosong' }, t('umum.belumAdaHasil')));
 
-  // Perhitungan pertama dijadwalkan setelah cat pertama, bukan di tengahnya.
-  // Halaman muncul lengkap dan bisa digulir sementara mesin R baru menyala.
+  // Perhitungan pertama dijadwalkan setelah pohon ini dipasang ke halaman,
+  // bukan di tengah perakitannya, supaya halaman muncul lengkap lebih dulu.
+  //
+  // setTimeout, bukan requestAnimationFrame. Peramban tidak pernah menjalankan
+  // callback rAF pada tab yang tidak terlihat, jadi halaman yang dibuka di tab
+  // latar akan berhenti selamanya di keadaan "belum ada hasil" — dan baru
+  // ketahuan saat pengguna berpindah ke tab itu dan menemukannya kosong.
+  // setTimeout tetap berjalan di tab latar, hanya dilambatkan.
   if (opsi.hitungOtomatis === true) {
-    requestAnimationFrame(() => {
-      setTimeout(() => void jalankan(), 0);
-    });
+    setTimeout(() => void jalankan(), 0);
   }
 
   return el(

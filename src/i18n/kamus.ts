@@ -353,6 +353,13 @@ export const id = {
       'Sesi 9 memberi rumus interpolasi data terkelompok, sesi 10 menyuruh pakai ' +
       'kuartil SPSS. Keduanya berbeda hasil. Modul menyebut Q sama dengan nol ' +
       'bila semua penilai sepakat — hanya kuartil SPSS yang memenuhi itu.',
+    temuan4Judul: 'Hitungan pertama yang tidak pernah terjadi',
+    temuan4:
+      'Hasil pertama tiap kalkulator dijadwalkan lewat requestAnimationFrame. ' +
+      'Peramban tidak pernah menjalankan callback itu pada tab yang tidak ' +
+      'terlihat, jadi halaman yang dibuka di tab latar berhenti selamanya di ' +
+      'keadaan belum ada hasil. Tidak satu pun uji menangkapnya — yang ' +
+      'menemukannya adalah membuka situs yang sudah terbit.',
     temuan3Judul: 'Bug WebR di Node untuk Windows',
     temuan3:
       'WebR memuat runtime R dengan import atas jalur hasil path.resolve. Di ' +
@@ -730,6 +737,12 @@ export const en: Cermin<Kamus> = {
       'Session 9 gives a grouped-data interpolation formula; session 10 says to ' +
       'use SPSS quartiles. They disagree. The module states Q equals zero when ' +
       'all judges agree — only the SPSS quartiles satisfy that.',
+    temuan4Judul: 'A first computation that never happened',
+    temuan4:
+      'Each calculator scheduled its first result through ' +
+      'requestAnimationFrame. Browsers never run that callback in a tab that ' +
+      'is not visible, so a page opened in a background tab sat forever on ' +
+      'no results yet. No test caught it — opening the published site did.',
     temuan3Judul: 'A WebR bug on Node for Windows',
     temuan3:
       'WebR loads the R runtime by importing a path from path.resolve. On ' +

@@ -43,7 +43,7 @@ export function halamanBeranda(): HTMLElement {
       el(
         'div',
         { kelas: 'angka-baris' },
-        el('div', { kelas: 'angka-ringkas' }, el('strong', {}, '158'), el('span', {}, t('beranda.angkaUji'))),
+        el('div', { kelas: 'angka-ringkas' }, el('strong', {}, '162'), el('span', {}, t('beranda.angkaUji'))),
         el('div', { kelas: 'angka-ringkas' }, el('strong', {}, '30+'), el('span', {}, t('beranda.angkaRumus'))),
         el('div', { kelas: 'angka-ringkas' }, el('strong', {}, String(SESI.length)), el('span', {}, t('beranda.angkaSesi'))),
         el('div', { kelas: 'angka-ringkas' }, el('strong', {}, '0'), el('span', {}, t('beranda.angkaJaringan'))),
@@ -126,6 +126,7 @@ export function halamanMetode(): HTMLElement {
         temuan(t('metode.temuan1Judul'), t('metode.temuan1')),
         temuan(t('metode.temuan2Judul'), t('metode.temuan2')),
         temuan(t('metode.temuan3Judul'), t('metode.temuan3')),
+        temuan(t('metode.temuan4Judul'), t('metode.temuan4')),
       ),
     ),
     el(
