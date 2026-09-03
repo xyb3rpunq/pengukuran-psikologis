@@ -282,7 +282,74 @@ def bangun() -> dict:
     }
 
 
+def _jelajah(kiri, kanan, jalur=""):
+    """Bandingkan dua struktur bersarang, memulangkan selisih numerik terbesar."""
+    if isinstance(kiri, dict):
+        if not isinstance(kanan, dict) or kiri.keys() != kanan.keys():
+            raise SystemExit(f"struktur berbeda di {jalur or '<akar>'}")
+        return max(
+            (_jelajah(kiri[k], kanan[k], f"{jalur}.{k}") for k in kiri),
+            default=(0.0, jalur),
+        )
+    if isinstance(kiri, list):
+        if not isinstance(kanan, list) or len(kiri) != len(kanan):
+            raise SystemExit(f"panjang larik berbeda di {jalur or '<akar>'}")
+        return max(
+            (_jelajah(a, b, f"{jalur}[{i}]") for i, (a, b) in enumerate(zip(kiri, kanan))),
+            default=(0.0, jalur),
+        )
+    if isinstance(kiri, bool) or kiri is None:
+        if kiri != kanan:
+            raise SystemExit(f"nilai berbeda di {jalur}: {kiri!r} vs {kanan!r}")
+        return (0.0, jalur)
+    if isinstance(kiri, (int, float)):
+        if not isinstance(kanan, (int, float)):
+            raise SystemExit(f"tipe berbeda di {jalur}")
+        skala = max(1.0, abs(kiri), abs(kanan))
+        return (abs(kiri - kanan) / skala, jalur)
+    if kiri != kanan:
+        raise SystemExit(f"nilai berbeda di {jalur}: {kiri!r} vs {kanan!r}")
+    return (0.0, jalur)
+
+
+# Batas pemeriksaan ulang. Jauh lebih longgar daripada presisi double, dan jauh
+# lebih ketat daripada 1e-10 yang dituntut uji konformansi — cukup untuk
+# menangkap rumus yang berubah, tanpa mempersoalkan digit terakhir.
+TOLERANSI_PERIKSA = 1e-12
+
+
+def periksa() -> None:
+    """Bangkitkan ulang, lalu bandingkan dengan vektor yang tersimpan.
+
+    Ini TIDAK boleh berupa perbandingan byte demi byte. scipy.stats.t.ppf tidak
+    menjanjikan hasil yang identik bit demi bit antar sistem operasi dan antar
+    build BLAS; menjalankannya di Windows dan di Linux memang memberi selisih
+    pada digit ke-16. Perbandingan byte akan menyatakan itu sebagai kegagalan,
+    padahal yang berbeda bukan rumusnya melainkan pembulatan terakhirnya.
+    """
+    tersimpan = json.loads(BERKAS_KELUARAN.read_text(encoding="utf-8"))
+    baru = bangun()
+
+    # Metadata versi pustaka memang berbeda antar mesin, jadi tidak dibandingkan.
+    tersimpan.pop("dibangkitkanOleh", None)
+    baru.pop("dibangkitkanOleh", None)
+
+    selisih, jalur = _jelajah(tersimpan, baru)
+    if selisih > TOLERANSI_PERIKSA:
+        raise SystemExit(
+            f"vektor emas menyimpang: selisih relatif {selisih:.3e} di {jalur} "
+            f"(batas {TOLERANSI_PERIKSA:.0e})"
+        )
+    print(f"vektor emas cocok — selisih relatif terbesar {selisih:.3e} di {jalur}")
+
+
 def main() -> None:
+    import sys
+
+    if "--periksa" in sys.argv:
+        periksa()
+        return
+
     data = bangun()
     BERKAS_KELUARAN.write_text(json.dumps(data, indent=1), encoding="utf-8")
     print(f"vektor emas ditulis: {BERKAS_KELUARAN}")

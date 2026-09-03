@@ -51,14 +51,16 @@ jobs:
       - run: pip install numpy scipy
 
       # Vektor emas dibangkitkan ulang, lalu dibandingkan dengan yang tersimpan
-      # di repositori. Kalau berbeda, ada rumus di sisi Python yang berubah
+      # di repositori. Kalau menyimpang, ada rumus di sisi Python yang berubah
       # tanpa vektornya ikut diperbarui — dan uji konformansi jadi menguji
       # sesuatu yang sudah usang.
-      - name: Bangkitkan ulang vektor emas
-        run: python conformance/referensi.py
-
-      - name: Pastikan vektor emas tidak berubah
-        run: git diff --exit-code -- conformance/vektor.json
+      #
+      # Perbandingannya numerik dengan toleransi, bukan byte demi byte:
+      # scipy.stats.t.ppf tidak identik bit demi bit antara Windows dan Linux,
+      # dan menuntut kesamaan byte berarti menguji sesuatu yang tidak pernah
+      # dijanjikan scipy.
+      - name: Periksa vektor emas terhadap numpy dan scipy di sini
+        run: python conformance/referensi.py --periksa
 
       - name: Jalankan uji konformansi
         run: npx vitest run uji/conformance.uji.ts
