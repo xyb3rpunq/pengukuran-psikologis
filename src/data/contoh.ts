@@ -218,3 +218,94 @@ export const RESPON_FAKTOR: readonly (readonly number[])[] = [
 ];
 
 export const NAMA_BUTIR_FAKTOR = ['D1', 'D2', 'D3', 'D4', 'E1', 'E2', 'E3', 'E4'];
+
+/**
+ * Jawaban pilihan ganda: 30 peserta, 8 butir, 5 opsi, nilainya nomor pilihan.
+ *
+ * Butir 6 sengaja dibuat punya pengecoh yang justru menarik peserta kuat —
+ * pola yang di kelas sering disebut "kunci ganda" dan yang harus tertangkap
+ * analisis distraktor sebagai menyesatkan. Tanpa satu butir seperti itu,
+ * halaman contohnya hanya akan menunjukkan tabel yang semuanya hijau.
+ */
+export const PILIHAN_GANDA: readonly (readonly number[])[] = [
+  [1, 3, 2, 5, 4, 4, 1, 3],
+  [1, 3, 2, 5, 4, 4, 3, 1],
+  [1, 3, 2, 5, 4, 1, 1, 3],
+  [1, 1, 2, 5, 1, 4, 2, 2],
+  [1, 3, 2, 5, 4, 4, 1, 3],
+  [1, 3, 2, 5, 4, 4, 1, 3],
+  [1, 1, 2, 1, 1, 4, 1, 3],
+  [1, 3, 2, 5, 4, 2, 1, 3],
+  [3, 3, 2, 1, 4, 1, 3, 4],
+  [3, 3, 1, 4, 4, 1, 4, 5],
+  [1, 3, 1, 1, 4, 1, 4, 3],
+  [1, 3, 1, 5, 1, 2, 1, 1],
+  [1, 3, 5, 2, 3, 4, 3, 3],
+  [3, 3, 2, 5, 4, 2, 1, 3],
+  [1, 3, 5, 1, 5, 2, 5, 1],
+  [2, 3, 2, 5, 5, 1, 1, 3],
+  [1, 1, 4, 1, 1, 2, 1, 4],
+  [1, 3, 2, 1, 1, 2, 3, 4],
+  [2, 1, 1, 5, 4, 2, 2, 3],
+  [4, 3, 4, 1, 1, 1, 5, 1],
+  [1, 2, 5, 5, 5, 1, 1, 3],
+  [5, 3, 2, 5, 1, 5, 2, 1],
+  [1, 4, 2, 2, 2, 1, 2, 1],
+  [1, 3, 1, 1, 5, 1, 5, 5],
+  [4, 1, 1, 1, 1, 4, 1, 4],
+  [1, 3, 3, 5, 4, 1, 4, 5],
+  [1, 3, 1, 4, 4, 3, 2, 1],
+  [1, 3, 5, 3, 1, 1, 2, 2],
+  [3, 1, 2, 5, 4, 1, 4, 1],
+  [4, 3, 5, 1, 1, 1, 2, 1],
+];
+
+/** Kunci jawaban untuk PILIHAN_GANDA, satu nomor pilihan per butir. */
+export const KUNCI_PILIHAN_GANDA: readonly number[] = [1, 3, 2, 5, 4, 2, 1, 3];
+
+export const NAMA_BUTIR_PG = ['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8'];
+
+/**
+ * Skala untuk halaman seleksi butir: 32 responden, 8 butir.
+ *
+ * Lima butir pertama dibangkitkan dari satu sifat laten yang sama; tiga
+ * terakhir angka acak murni. Prosedur seleksi yang benar harus menyisakan
+ * tepat kelima butir pertama, dan alpha-nya harus naik saat ketiga butir
+ * derau itu pergi. Itulah yang membuat contoh ini mengajarkan sesuatu.
+ */
+export const SKALA_BERDERAU: readonly (readonly number[])[] = [
+  [1, 1, 1, 1, 1, 4, 4, 5],
+  [4, 3, 3, 3, 3, 3, 3, 2],
+  [5, 4, 5, 5, 5, 5, 1, 4],
+  [3, 4, 4, 4, 4, 1, 3, 1],
+  [3, 2, 4, 3, 3, 1, 3, 2],
+  [3, 4, 5, 3, 4, 2, 5, 1],
+  [5, 5, 5, 5, 5, 3, 2, 4],
+  [1, 1, 1, 1, 1, 2, 5, 3],
+  [2, 1, 2, 3, 2, 1, 1, 1],
+  [3, 4, 4, 2, 4, 1, 1, 3],
+  [2, 2, 1, 3, 1, 4, 5, 1],
+  [4, 5, 5, 4, 5, 5, 5, 5],
+  [2, 2, 1, 1, 1, 1, 4, 4],
+  [2, 3, 2, 3, 3, 5, 3, 5],
+  [5, 5, 5, 4, 5, 1, 2, 5],
+  [1, 1, 2, 2, 1, 4, 5, 3],
+  [3, 3, 2, 3, 2, 5, 3, 2],
+  [4, 3, 3, 4, 3, 5, 1, 4],
+  [5, 4, 4, 4, 3, 4, 3, 4],
+  [5, 5, 3, 4, 5, 2, 1, 2],
+  [1, 1, 2, 1, 2, 1, 1, 1],
+  [1, 1, 2, 2, 2, 2, 5, 1],
+  [4, 4, 4, 3, 4, 4, 1, 5],
+  [3, 3, 3, 3, 2, 3, 1, 1],
+  [1, 1, 1, 1, 1, 5, 1, 5],
+  [3, 2, 3, 3, 3, 4, 2, 1],
+  [3, 3, 4, 4, 4, 2, 3, 3],
+  [4, 4, 3, 4, 4, 5, 4, 5],
+  [1, 1, 2, 1, 1, 3, 4, 4],
+  [5, 5, 4, 5, 4, 1, 1, 5],
+  [3, 3, 2, 2, 3, 4, 2, 5],
+  [1, 2, 2, 2, 2, 3, 4, 3],
+];
+
+export const NAMA_BUTIR_SELEKSI = ['B1', 'B2', 'B3', 'B4', 'B5', 'X1', 'X2', 'X3'];

@@ -38,6 +38,7 @@ import {
   halamanValiditas,
 } from './ui/halaman/kalkulator';
 import { halamanFaktor, halamanSus } from './ui/halaman/lanjutan';
+import { halamanDistraktor, halamanSeleksi } from './ui/halaman/prosedur';
 
 const KUNCI_TEMA = 'tera.tema';
 const BASE_URL_WEBR = `${import.meta.env.BASE_URL}webr/`;
@@ -129,6 +130,8 @@ const RUTE: readonly Rute[] = [
   { jalur: '#/thurstone', nav: 'nav.thurstone', bangun: () => halamanThurstone(konteks) },
   { jalur: '#/guttman', nav: 'nav.guttman', bangun: () => halamanGuttman(konteks) },
   { jalur: '#/likert', nav: 'nav.likert', bangun: () => halamanLikert(konteks) },
+  { jalur: '#/distraktor', nav: 'nav.distraktor', bangun: () => halamanDistraktor(konteks) },
+  { jalur: '#/seleksi', nav: 'nav.seleksi', bangun: () => halamanSeleksi(konteks) },
   { jalur: '#/faktor', nav: 'nav.faktor', bangun: () => halamanFaktor(konteks) },
   { jalur: '#/sus', nav: 'nav.sus', bangun: () => halamanSus(konteks) },
   { jalur: '#/tabel-r', nav: 'nav.tabelR', bangun: () => halamanTabelR(konteks) },

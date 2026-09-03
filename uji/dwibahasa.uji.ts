@@ -67,6 +67,7 @@ beforeAll(async () => {
   const modul = await import('../src/ui/halaman/modul');
   const kalkulator = await import('../src/ui/halaman/kalkulator');
   const lanjutan = await import('../src/ui/halaman/lanjutan');
+  const prosedur = await import('../src/ui/halaman/prosedur');
 
   kamus = kamusModul.kamus;
   pasangBahasa = i18n.pasangBahasa;
@@ -93,6 +94,8 @@ beforeAll(async () => {
     { nama: 'tabelR', bangun: () => kalkulator.halamanTabelR(konteks) },
     { nama: 'faktor', bangun: () => lanjutan.halamanFaktor(konteks) },
     { nama: 'sus', bangun: () => lanjutan.halamanSus(konteks) },
+    { nama: 'distraktor', bangun: () => prosedur.halamanDistraktor(konteks) },
+    { nama: 'seleksi', bangun: () => prosedur.halamanSeleksi(konteks) },
   ];
 });
 
@@ -164,7 +167,7 @@ const DIIZINKAN = new Set([
   'Gable', 'Suryabrata', 'Djaali', 'github', 'com', 'xyb3rpunq',
   'pengukuran', 'psikologis', 'alpha', 'Alpha', 'Bb', 'Pkb', 'pm', 'df',
   'BA', 'JA', 'BB', 'JB', 'Js', 'XY', 'X', 'Y', 'U', 'V', 'K', 'i',
-  'r∗', 'P·D', 'z·T', 'S·Q', 'Lb', 'Pcb', 'KMO', 'MSA', 'SUS',
+  'r∗', 'P·D', 'z·T', 'S·Q', 'Lb', 'Pcb', 'KMO', 'MSA', 'SUS', 'ABCD', '→α',
 ]);
 
 /** Kode butir dan responden pada data contoh: S1, B3, G2, T7, R14, P01, A5. */

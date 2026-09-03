@@ -16,7 +16,8 @@
 #   nilai.diLuarRentang, nilai.harusPositif, skala.tidakDikenal,
 #   thurstone.penilaianDiLuarRentang, guttman.responBukanBiner,
 #   faktor.matriksSingular, faktor.terlaluBanyak, faktor.gagalKonvergen,
-#   sus.bukanSepuluhButir
+#   sus.bukanSepuluhButir, distraktor.kunciDiLuarRentang,
+#   distraktor.pilihanDiLuarRentang
 
 #' Lempar galat dengan kode yang bisa diterjemahkan.
 #'

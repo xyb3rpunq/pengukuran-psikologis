@@ -13,7 +13,7 @@ Setiap rumus di modul **PSI307** ditulis ulang sebagai kode **R**, dijalankan di
 [![CI](https://github.com/xyb3rpunq/pengukuran-psikologis/actions/workflows/ci.yml/badge.svg)](https://github.com/xyb3rpunq/pengukuran-psikologis/actions/workflows/ci.yml)
 [![Deploy](https://github.com/xyb3rpunq/pengukuran-psikologis/actions/workflows/deploy.yml/badge.svg)](https://github.com/xyb3rpunq/pengukuran-psikologis/actions/workflows/deploy.yml)
 [![R](https://img.shields.io/badge/R-4.6.0%20di%20peramban-276DC3?logo=r&logoColor=white)](https://docs.r-wasm.org/webr/latest/)
-[![Uji](https://img.shields.io/badge/uji-210%20lulus-3fb950)](uji/)
+[![Uji](https://img.shields.io/badge/uji-231%20lulus-3fb950)](uji/)
 [![Konformansi](https://img.shields.io/badge/konformansi-numpy%20%2B%20scipy-4dd4c8)](conformance/)
 [![Bahasa](https://img.shields.io/badge/bahasa-ID%20%2B%20EN-7c6cf0)](src/i18n/kamus.ts)
 [![Lisensi](https://img.shields.io/badge/lisensi-MIT-blue)](LICENSE)
@@ -32,7 +32,7 @@ Mata kuliah **PSI307 Pengukuran Psikologis** mengajarkan empat belas sesi berisi
 
 Proyek ini menulis ulang seluruhnya sebagai kode R yang berjalan di dalam peramban — lalu membuktikan hasilnya benar dengan tiga cara berbeda.
 
-### Sebelas alat hitung
+### Tiga belas alat hitung
 
 | Alat | Sesi | Yang dihitung |
 |---|---|---|
@@ -44,6 +44,8 @@ Proyek ini menulis ulang seluruhnya sebagai kode R yang berjalan di dalam peramb
 | **Guttman** | 11, 12 | Scalogram, error Goodenough, koefisien reprodusibilitas dan skalabilitas |
 | **Likert** | 13 | Pembalikan butir unfavorable, indeks persentase, alpha, rho Spearman |
 | **Tabel r** | 5, 14 | Nilai kritis product moment untuk N berapa pun, dihitung dari distribusi t |
+| **Analisis distraktor** | 7 | Pola jawaban pilihan ganda: proporsi tiap opsi, sebarannya di kelompok atas dan bawah, penandaan pengecoh yang tidak berfungsi atau justru menyesatkan |
+| **Seleksi butir** | 2, 5, 6 | Pembuangan butir gugur satu per satu, riwayat tiap putaran, dan alpha yang naik di sepanjangnya |
 | **Analisis faktor** | 5, 2 | Bartlett, KMO dan MSA per butir, nilai eigen, muatan terotasi varimax atau promax, komunalitas, deteksi butir bermuatan ganda |
 | **SUS** | 13 | System Usability Scale: skor, peringkat huruf Sauro-Lewis, kata sifat Bangor, keberterimaan, jenjang persentil, selang kepercayaan |
 | **Peta modul** | 1–14 | Ringkasan tiap sesi, masing-masing dengan satu gambar |
@@ -82,7 +84,7 @@ Runtime R berukuran 46 MB, dan situs yang menunggunya sebelum menggambar apa pun
 
 | | |
 |---|---|
-| Bundel JavaScript | 241 kB, 73 kB setelah gzip |
+| Bundel JavaScript | 270 kB, 80 kB setelah gzip |
 | CSS | 15 kB, 3,8 kB setelah gzip |
 | Pustaka grafik | tidak ada — seluruh visualisasi SVG ditulis tangan |
 | Kerangka kerja UI | tidak ada |
@@ -93,7 +95,7 @@ Runtime R berukuran 46 MB, dan situs yang menunggunya sebelum menggambar apa pun
 
 ```bash
 npm install
-npm test          # 210 uji, menjalankan berkas R yang sama dengan situsnya
+npm test          # 231 uji, menjalankan berkas R yang sama dengan situsnya
 npm run periksa   # tsc --noEmit
 npm run dev       # pengembangan
 npm run build     # tipe, bundel, salin runtime R ke dist/webr
@@ -113,7 +115,7 @@ python conformance/referensi.py
 | `src/mesin/` | Jembatan ke WebR: penulis literal, permukaan bertipe, pemetaan galat |
 | `src/ui/` | Cangkang tanpa kerangka kerja, komponen, dan pustaka visualisasi SVG |
 | `src/i18n/` | Kamus dwibahasa — satu-satunya tempat kalimat berbahasa manusia |
-| `uji/` | 210 uji, dijalankan Vitest lewat WebR di Node |
+| `uji/` | 231 uji, dijalankan Vitest lewat WebR di Node |
 | `conformance/` | Implementasi pembanding numpy dan scipy, beserta vektor emasnya |
 
 ### Catatan hak cipta
@@ -168,7 +170,7 @@ The R runtime is 46 MB, and a site that waits for it before drawing anything sit
 
 ```bash
 npm install
-npm test          # 210 tests, running the same R files as the site
+npm test          # 231 tests, running the same R files as the site
 npm run periksa   # tsc --noEmit
 npm run dev
 npm run build

@@ -899,3 +899,147 @@ export function termometerSus(
   svg.appendChild(label(keX(skor), T - 14, angka(skor, 1), 'v-penanda-label'));
   return svg;
 }
+
+// --- Tangga alpha pada seleksi butir --------------------------------------
+
+export interface AnakTanggaAlpha {
+  readonly label: string;
+  readonly alpha: number | null;
+  readonly banyakButir: number;
+}
+
+/**
+ * Alpha Cronbach di sepanjang putaran pembuangan butir.
+ *
+ * Gambar ini menjawab pertanyaan yang tidak pernah dijawab tabel: apakah
+ * membuang butir itu ada gunanya. Garis yang naik curam lalu mendatar
+ * memberi tahu kapan pemangkasan sudah selesai membawa manfaat — dan garis
+ * yang justru turun memberi tahu bahwa butir terakhir tadi tidak seharusnya
+ * dibuang.
+ */
+export function tanggaAlpha(
+  judul: string,
+  sumbu: string,
+  langkah: readonly AnakTanggaAlpha[],
+): SVGSVGElement {
+  const L = 560;
+  const T = 300;
+  const pad = { kiri: 52, kanan: 24, atas: 22, bawah: 52 };
+  const svg = kanvas(L, T, judul);
+  if (langkah.length === 0) return svg;
+
+  const nilai = langkah.map((satu) => satu.alpha).filter((a): a is number => a !== null);
+  const bawah = Math.min(0, ...nilai);
+  const atas = Math.max(1, ...nilai);
+  const bentang = atas - bawah || 1;
+
+  const keX = (i: number): number =>
+    pad.kiri + (langkah.length === 1 ? 0.5 : i / (langkah.length - 1)) * (L - pad.kiri - pad.kanan);
+  const keY = (a: number): number =>
+    T - pad.bawah - ((a - bawah) / bentang) * (T - pad.atas - pad.bawah);
+
+  for (let i = 0; i <= 4; i += 1) {
+    const a = bawah + (bentang * i) / 4;
+    svg.appendChild(
+      s('line', { x1: pad.kiri, y1: keY(a), x2: L - pad.kanan, y2: keY(a), class: 'v-kisi' }),
+    );
+    svg.appendChild(label(pad.kiri - 8, keY(a) + 4, angka(a, 2), 'v-angka', 'end'));
+  }
+
+  // Ambang 0,70 — batas yang paling sering dipakai menyatakan sebuah skala
+  // sudah cukup reliabel untuk dipakai.
+  if (bawah <= 0.7 && atas >= 0.7) {
+    svg.appendChild(
+      s('line', { x1: pad.kiri, y1: keY(0.7), x2: L - pad.kanan, y2: keY(0.7), class: 'v-ambang' }),
+    );
+  }
+
+  const jalur = langkah
+    .map((satu, i) => (satu.alpha === null ? '' : `${i === 0 ? 'M' : 'L'} ${keX(i)} ${keY(satu.alpha)}`))
+    .filter((bagian) => bagian !== '')
+    .join(' ');
+  svg.appendChild(s('path', { d: jalur, class: 'v-kurva' }));
+
+  langkah.forEach((satu, i) => {
+    if (satu.alpha !== null) {
+      svg.appendChild(
+        s('circle', {
+          cx: keX(i),
+          cy: keY(satu.alpha),
+          r: 5,
+          class: i === langkah.length - 1 ? 'v-titik-baik' : 'v-titik',
+        }),
+      );
+    }
+    svg.appendChild(label(keX(i), T - pad.bawah + 18, satu.label, 'v-titik-label'));
+    svg.appendChild(
+      label(keX(i), T - pad.bawah + 32, String(satu.banyakButir), 'v-angka'),
+    );
+  });
+
+  svg.appendChild(label((L + pad.kiri) / 2, T - 8, sumbu, 'v-label'));
+  return svg;
+}
+
+// --- Peta pilihan jawaban --------------------------------------------------
+
+export interface BarisDistraktor {
+  readonly butir: string;
+  /** Satu entri per pilihan, urut dari pilihan pertama. */
+  readonly pilihan: readonly {
+    readonly proporsi: number;
+    readonly kunci: boolean;
+    readonly kategori: string | null;
+  }[];
+}
+
+/**
+ * Sebaran pilihan jawaban tiap butir, kunci ditandai.
+ *
+ * Yang dicari mata di sini adalah pengecoh yang lebarnya nyaris nol — ia tidak
+ * mengecoh siapa pun dan diam-diam mengubah soal lima pilihan menjadi empat.
+ * Pengecoh yang ditandai merah lebih buruk lagi: ia lebih sering dipilih
+ * peserta kuat daripada peserta lemah, yang hampir selalu berarti kuncinya
+ * keliru atau pengecohnya sebenarnya juga benar.
+ */
+export function petaDistraktor(
+  judul: string,
+  labelKunci: string,
+  baris: readonly BarisDistraktor[],
+): SVGSVGElement {
+  const L = 620;
+  const tinggiBaris = 32;
+  const T = 34 + baris.length * tinggiBaris;
+  const kiri = 56;
+  const kanan = L - 18;
+  const svg = kanvas(L, T, judul);
+
+  baris.forEach((satu, i) => {
+    const y = 24 + i * tinggiBaris;
+    svg.appendChild(label(kiri - 10, y + 15, satu.butir, 'v-titik-label', 'end'));
+    let x = kiri;
+    satu.pilihan.forEach((pilihan, o) => {
+      const lebar = pilihan.proporsi * (kanan - kiri);
+      if (lebar > 0.5) {
+        const kelas = pilihan.kunci
+          ? 'v-pilihan-kunci'
+          : pilihan.kategori === 'menyesatkan'
+            ? 'v-pilihan-menyesatkan'
+            : 'v-pilihan-pengecoh';
+        svg.appendChild(
+          s('rect', { x, y, width: lebar, height: 22, rx: 2, class: kelas }),
+        );
+        if (lebar > 18) {
+          svg.appendChild(label(x + lebar / 2, y + 15, String(o + 1), 'v-angka-kecil'));
+        }
+      }
+      x += lebar;
+    });
+  });
+
+  const legenda = s('g', {});
+  legenda.appendChild(s('rect', { x: kiri, y: T - 16, width: 12, height: 12, rx: 2, class: 'v-pilihan-kunci' }));
+  legenda.appendChild(label(kiri + 18, T - 6, labelKunci, 'v-angka-kecil', 'start'));
+  svg.appendChild(legenda);
+  return svg;
+}

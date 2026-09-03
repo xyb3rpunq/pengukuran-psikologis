@@ -33,6 +33,8 @@ export const id = {
     tabelR: 'Tabel r',
     faktor: 'Analisis faktor',
     sus: 'SUS',
+    distraktor: 'Distraktor',
+    seleksi: 'Seleksi butir',
     modul: 'Modul',
     metode: 'Metode',
   },
@@ -102,6 +104,14 @@ export const id = {
     batasMuatan: 'Batas muatan berarti',
     imporBerkas: 'Impor berkas CSV',
     petunjukImpor: 'Seret berkas ke sini, atau klik untuk memilih. Baris pertama boleh berisi nama butir.',
+    kunciJawaban: 'Kunci jawaban',
+    petunjukKunci: 'Nomor pilihan yang benar untuk tiap butir, dipisah koma. Panjangnya harus sama dengan jumlah butir.',
+    banyakPilihan: 'Banyak pilihan jawaban',
+    metodeSeleksi: 'Kriteria gugur',
+    metodeRTabel: 'Nilai kritis r pada taraf yang dipilih',
+    metodeTetap: 'Satu angka tetap',
+    ambangTetap: 'Ambang tetap',
+    minButir: 'Batas bawah jumlah butir',
   },
   galat: {
     'data.kosong': 'Datanya kosong.',
@@ -127,6 +137,8 @@ export const id = {
     'faktor.gagalKonvergen':
       'Penaksiran tidak menemukan penyelesaian. Coba kurangi jumlah faktornya.',
     'sus.bukanSepuluhButir': 'SUS selalu terdiri atas sepuluh butir, tidak kurang tidak lebih.',
+    'distraktor.kunciDiLuarRentang': 'Ada kunci jawaban di luar rentang pilihan yang tersedia.',
+    'distraktor.pilihanDiLuarRentang': 'Ada jawaban di luar rentang pilihan yang tersedia.',
     'berkas.takTerbaca': 'Berkasnya tidak terbaca sebagai tabel angka.',
     'mesin.gagal': 'Mesin gagal menyelesaikan perhitungan.',
     'mesin.gagalMuat': 'Mesin R gagal dimuat.',
@@ -159,9 +171,12 @@ export const id = {
     terbaik: 'Terbaik',
     marginal: 'Marginal',
     diterima: 'Diterima',
+    berfungsi: 'Berfungsi',
+    takBerfungsi: 'Tidak berfungsi',
+    menyesatkan: 'Menyesatkan',
   },
   beranda: {
-    judul: 'Sebelas alat hitung untuk satu mata kuliah',
+    judul: 'Tiga belas alat hitung untuk satu mata kuliah',
     intro:
       'Setiap rumus di modul PSI307 ditulis ulang sebagai kode R, dijalankan di ' +
       'peramban lewat WebAssembly, dan diuji terhadap angka yang tercetak di ' +
@@ -177,6 +192,8 @@ export const id = {
     kartuModul: 'Ringkasan empat belas sesi beserta rumus yang diajarkan di masing-masing.',
     kartuFaktor: 'Bartlett, KMO, nilai eigen, dan muatan faktor untuk membuktikan validitas konstruk.',
     kartuSus: 'System Usability Scale: skor, peringkat huruf, dan kedudukannya terhadap patokan 68.',
+    kartuDistraktor: 'Pola jawaban soal pilihan ganda — pengecoh mana yang bekerja dan mana yang menyesatkan.',
+    kartuSeleksi: 'Membuang butir yang gugur satu per satu, dan melihat alpha naik di tiap putarannya.',
     angkaUji: 'uji lulus',
     angkaRumus: 'rumus psikometri',
     angkaSesi: 'sesi kuliah',
@@ -414,6 +431,81 @@ export const id = {
       'simpangan baku 12,5. Hampiran, bukan tabel pasti — dibaca sebagai ' +
       'perkiraan kedudukan, bukan peringkat yang tepat.',
   },
+  distraktor: {
+    judul: 'Analisis distraktor',
+    penjelasan:
+      'Sesi 7 menyebut tiga hal dalam analisis soal: taraf kesukaran, daya ' +
+      'pembeda, dan pola jawaban. Yang ketiga ini. Yang dilihat bukan lagi ' +
+      'benar-salahnya, melainkan ke mana peserta yang salah itu pergi.',
+    judulPeta: 'Sebaran pilihan jawaban tiap butir',
+    labelKunci: 'kunci jawaban',
+    kolomPilihan: 'Pilihan',
+    kolomKunci: 'Kunci',
+    kolomBanyak: 'Dipilih',
+    kolomProporsi: 'Proporsi',
+    kolomPAtas: 'Kelompok atas',
+    kolomPBawah: 'Kelompok bawah',
+    kolomSelisih: 'Selisih',
+    kolomKategori: 'Keberfungsian',
+    kolomBerfungsi: 'Pengecoh berfungsi',
+    kolomTakBerfungsi: 'Tidak berfungsi',
+    kolomMenyesatkan: 'Menyesatkan',
+    kolomSemuaBerfungsi: 'Semua bekerja',
+    ringkasPengecoh: 'Total pengecoh',
+    ringkasTakBerfungsi: 'Tidak berfungsi',
+    ringkasMenyesatkan: 'Menyesatkan',
+    catatanAmbang:
+      'Sebuah pengecoh dianggap bekerja bila dipilih sekurang-kurangnya 5 ' +
+      'persen peserta. Pengecoh yang tidak dipilih siapa pun tidak mengecoh ' +
+      'siapa pun — ia diam-diam mengubah soal lima pilihan menjadi empat.',
+    catatanMenyesatkan:
+      'Pengecoh yang lebih sering dipilih kelompok atas daripada kelompok ' +
+      'bawah hampir selalu berarti satu dari dua hal: kuncinya keliru, atau ' +
+      'pengecoh itu sebenarnya juga benar. Keduanya cacat pada soalnya, bukan ' +
+      'pada pesertanya.',
+  },
+  seleksi: {
+    judul: 'Seleksi butir berulang',
+    penjelasan:
+      'Sesi 2 menyuruh membuang butir yang gugur lalu merevisi instrumennya, ' +
+      'dan berhenti di situ. Yang tidak disebut: membuang butir mengubah skor ' +
+      'total, dan skor total itulah yang dipakai menilai butir yang tersisa.',
+    catatanSatuPerSatu:
+      'Karena itu butir dibuang satu per satu, bukan sekaligus. Membuang ' +
+      'seluruh butir yang gagal dalam satu langkah adalah kesalahan yang ' +
+      'paling sering terjadi di skripsi: ia ikut membuang butir yang ' +
+      'sebenarnya akan selamat begitu butir terburuk pergi, dan skalanya ' +
+      'menjadi lebih pendek daripada yang perlu.',
+    judulTangga: 'Alpha di tiap putaran',
+    sumbuTangga: 'putaran — angka di bawah adalah butir yang tersisa',
+    awal: 'Awal',
+    akhir: 'Akhir',
+    banyakAwal: 'Butir awal',
+    banyakAkhir: 'Butir bertahan',
+    banyakDibuang: 'Butir dibuang',
+    alphaAwal: 'Alpha awal',
+    alphaAkhir: 'Alpha akhir',
+    selisihAlpha: 'Perubahan alpha',
+    ambang: 'Ambang gugur',
+    kolomPutaran: 'Putaran',
+    kolomDibuang: 'Dibuang',
+    kolomR: 'r hitung',
+    kolomBatas: 'Ambang',
+    kolomSebelum: 'Butir sebelum',
+    kolomSesudah: 'Butir sesudah',
+    kolomAlphaSebelum: 'Alpha sebelum',
+    kolomAlphaSesudah: 'Alpha sesudah',
+    kolomSelisih: 'Selisih',
+    kolomLolos: 'Lolos',
+    judulPutaran: 'Riwayat pembuangan',
+    judulAkhir: 'Butir yang bertahan',
+    bersih: 'Selesai — semua butir yang tersisa lolos',
+    batasBawah:
+      'Berhenti di batas bawah — masih ada butir yang gugur, tetapi skalanya ' +
+      'sudah terlalu pendek untuk dipangkas lagi. Skala seperti ini perlu ' +
+      'ditulis ulang, bukan dipotong terus.',
+    takAdaYangDibuang: 'Tidak ada butir yang perlu dibuang.',
+  },
   tabelR: {
     judul: 'Tabel r product moment',
     penjelasan:
@@ -532,6 +624,8 @@ export const en: Cermin<Kamus> = {
     tabelR: 'r table',
     faktor: 'Factor analysis',
     sus: 'SUS',
+    distraktor: 'Distractor',
+    seleksi: 'Item selection',
     modul: 'Modules',
     metode: 'Method',
   },
@@ -602,6 +696,14 @@ export const en: Cermin<Kamus> = {
     batasMuatan: 'Meaningful loading threshold',
     imporBerkas: 'Import a CSV file',
     petunjukImpor: 'Drop a file here, or click to choose one. The first row may hold item names.',
+    kunciJawaban: 'Answer key',
+    petunjukKunci: 'The correct option number for each item, comma separated. Its length must match the number of items.',
+    banyakPilihan: 'Number of options',
+    metodeSeleksi: 'Drop criterion',
+    metodeRTabel: 'Critical r at the chosen level',
+    metodeTetap: 'A single fixed value',
+    ambangTetap: 'Fixed threshold',
+    minButir: 'Lower bound on item count',
   },
   galat: {
     'data.kosong': 'The data is empty.',
@@ -627,6 +729,8 @@ export const en: Cermin<Kamus> = {
     'faktor.gagalKonvergen':
       'The estimation found no solution. Try asking for fewer factors.',
     'sus.bukanSepuluhButir': 'SUS always has exactly ten items, no more and no fewer.',
+    'distraktor.kunciDiLuarRentang': 'An answer key falls outside the available options.',
+    'distraktor.pilihanDiLuarRentang': 'An answer falls outside the available options.',
     'berkas.takTerbaca': 'That file could not be read as a table of numbers.',
     'mesin.gagal': 'The engine could not finish the computation.',
     'mesin.gagalMuat': 'The R engine failed to load.',
@@ -659,9 +763,12 @@ export const en: Cermin<Kamus> = {
     terbaik: 'Best imaginable',
     marginal: 'Marginal',
     diterima: 'Acceptable',
+    berfungsi: 'Working',
+    takBerfungsi: 'Not working',
+    menyesatkan: 'Misleading',
   },
   beranda: {
-    judul: 'Eleven calculators for one course',
+    judul: 'Thirteen calculators for one course',
     intro:
       'Every formula in the PSI307 modules rewritten as R code, run in the ' +
       'browser through WebAssembly, and tested against the numbers printed in ' +
@@ -678,6 +785,8 @@ export const en: Cermin<Kamus> = {
     kartuModul: 'A summary of all fourteen sessions and the formulas each one teaches.',
     kartuFaktor: 'Bartlett, KMO, eigenvalues, and factor loadings to evidence construct validity.',
     kartuSus: 'System Usability Scale: score, letter grade, and where it sits against the 68 benchmark.',
+    kartuDistraktor: 'Answer patterns on multiple-choice items — which distractors work and which mislead.',
+    kartuSeleksi: 'Dropping failing items one at a time, and watching alpha rise at every round.',
     angkaUji: 'tests passing',
     angkaRumus: 'psychometric formulas',
     angkaSesi: 'course sessions',
@@ -914,6 +1023,81 @@ export const en: Cermin<Kamus> = {
       'The percentile rank uses a normal approximation with a mean of 68 and ' +
       'a standard deviation of 12.5. An approximation, not an exact table — ' +
       'read it as a rough standing, not a precise rank.',
+  },
+  distraktor: {
+    judul: 'Distractor analysis',
+    penjelasan:
+      'Session 7 names three things in item analysis: difficulty, ' +
+      'discrimination, and the answer pattern. This is the third. What ' +
+      'matters here is no longer right or wrong, but where the wrong answers ' +
+      'went.',
+    judulPeta: 'Answer distribution per item',
+    labelKunci: 'answer key',
+    kolomPilihan: 'Option',
+    kolomKunci: 'Key',
+    kolomBanyak: 'Chosen',
+    kolomProporsi: 'Share',
+    kolomPAtas: 'Upper group',
+    kolomPBawah: 'Lower group',
+    kolomSelisih: 'Difference',
+    kolomKategori: 'Working',
+    kolomBerfungsi: 'Working distractors',
+    kolomTakBerfungsi: 'Not working',
+    kolomMenyesatkan: 'Misleading',
+    kolomSemuaBerfungsi: 'All working',
+    ringkasPengecoh: 'Distractors in total',
+    ringkasTakBerfungsi: 'Not working',
+    ringkasMenyesatkan: 'Misleading',
+    catatanAmbang:
+      'A distractor counts as working when at least 5 percent of candidates ' +
+      'choose it. One that nobody chooses distracts nobody — it quietly turns ' +
+      'a five-option item into a four-option one.',
+    catatanMenyesatkan:
+      'A distractor chosen more often by the upper group than the lower group ' +
+      'almost always means one of two things: the key is wrong, or that ' +
+      'distractor is also correct. Both are faults in the item, not in the ' +
+      'candidates.',
+  },
+  seleksi: {
+    judul: 'Iterative item selection',
+    penjelasan:
+      'Session 2 says to drop the failing items and revise the instrument, ' +
+      'then stops. What it leaves out: dropping an item changes the total ' +
+      'score, and that total score is what judges the remaining items.',
+    catatanSatuPerSatu:
+      'So items are dropped one at a time, not all at once. Dropping every ' +
+      'failing item in a single step is the most common mistake in a thesis: ' +
+      'it also removes items that would have survived once the worst one was ' +
+      'gone, leaving the scale shorter than it needed to be.',
+    judulTangga: 'Alpha at each round',
+    sumbuTangga: 'round — the number below is the items remaining',
+    awal: 'Start',
+    akhir: 'End',
+    banyakAwal: 'Items at start',
+    banyakAkhir: 'Items retained',
+    banyakDibuang: 'Items dropped',
+    alphaAwal: 'Alpha at start',
+    alphaAkhir: 'Alpha at end',
+    selisihAlpha: 'Change in alpha',
+    ambang: 'Drop threshold',
+    kolomPutaran: 'Round',
+    kolomDibuang: 'Dropped',
+    kolomR: 'r computed',
+    kolomBatas: 'Threshold',
+    kolomSebelum: 'Items before',
+    kolomSesudah: 'Items after',
+    kolomAlphaSebelum: 'Alpha before',
+    kolomAlphaSesudah: 'Alpha after',
+    kolomSelisih: 'Change',
+    kolomLolos: 'Passes',
+    judulPutaran: 'Removal history',
+    judulAkhir: 'Items retained',
+    bersih: 'Finished — every remaining item passes',
+    batasBawah:
+      'Stopped at the lower bound — items are still failing, but the scale is ' +
+      'already too short to cut further. A scale in this state needs ' +
+      'rewriting, not more trimming.',
+    takAdaYangDibuang: 'No item needed to be dropped.',
   },
   tabelR: {
     judul: 'Product-moment r table',

@@ -560,3 +560,117 @@ export interface HasilSus {
 export function analisisSus(mesin: Mesin, m: readonly (readonly number[])[]) {
   return mesin.panggil<HasilSus>(`ps_analisis_sus(${matriks(m)})`);
 }
+
+// --- Analisis distraktor ---------------------------------------------------
+
+export type KategoriDistraktor = 'berfungsi' | 'takBerfungsi' | 'menyesatkan';
+
+export interface BarisPilihan {
+  butir: string;
+  pilihan: number;
+  kunci: boolean;
+  banyak: number;
+  proporsi: number;
+  pAtas: number;
+  pBawah: number;
+  selisih: number;
+  kategori: KategoriDistraktor | null;
+}
+
+export interface ButirDistraktor {
+  butir: string;
+  kunci: number;
+  p: number;
+  pengecohBerfungsi: number;
+  pengecohTakBerfungsi: number;
+  pengecohMenyesatkan: number;
+  semuaBerfungsi: boolean;
+}
+
+export interface HasilDistraktor {
+  n: number;
+  banyakButir: number;
+  banyakPilihan: number;
+  proporsiKelompok: number;
+  banyakTiapKelompok: number;
+  rerataSkorTotal: number;
+  pilihan: BarisPilihan[];
+  butir: ButirDistraktor[];
+  banyakPengecoh: number;
+  totalTakBerfungsi: number;
+  totalMenyesatkan: number;
+}
+
+export function analisisDistraktor(
+  mesin: Mesin,
+  m: readonly (readonly number[])[],
+  kunci: readonly number[],
+  opsi: { banyakPilihan?: number; proporsi?: number; namaKolom?: readonly string[] } = {},
+) {
+  const banyakPilihan = angka(opsi.banyakPilihan ?? 5);
+  const proporsi = opsi.proporsi === undefined ? 'NULL' : angka(opsi.proporsi);
+  return mesin.panggil<HasilDistraktor>(
+    `ps_analisis_distraktor(${matriks(m, opsi.namaKolom)}, ${vektor(kunci)},` +
+      ` ${banyakPilihan}, ${proporsi})`,
+  );
+}
+
+// --- Seleksi butir berulang ------------------------------------------------
+
+export interface PutaranSeleksi {
+  putaran: number;
+  dibuang: string;
+  rHitung: number | null;
+  batas: number;
+  butirSebelum: number;
+  butirSesudah: number;
+  alphaSebelum: number | null;
+  alphaSesudah: number | null;
+  selisihAlpha: number | null;
+}
+
+export interface ButirAkhirSeleksi {
+  butir: string;
+  rHitung: number | null;
+  batas: number;
+  lolos: boolean;
+}
+
+export interface HasilSeleksi {
+  n: number;
+  metode: string;
+  batas: number;
+  alpha: number;
+  banyakAwal: number;
+  banyakAkhir: number;
+  banyakDibuang: number;
+  alphaAwal: number | null;
+  alphaAkhir: number | null;
+  selisihAlpha: number | null;
+  sebabBerhenti: 'bersih' | 'batasBawah';
+  butirBertahan: string[];
+  butirDibuang: string[];
+  putaran: PutaranSeleksi[];
+  akhir: ButirAkhirSeleksi[];
+}
+
+export function seleksiButir(
+  mesin: Mesin,
+  m: readonly (readonly number[])[],
+  opsi: {
+    metode?: 'rTabel' | 'tetap';
+    ambang?: number;
+    alpha?: number;
+    minButir?: number;
+    namaKolom?: readonly string[];
+  } = {},
+) {
+  const metode = teks(opsi.metode ?? 'rTabel');
+  const ambang = angka(opsi.ambang ?? 0.3);
+  const alpha = angka(opsi.alpha ?? 0.05);
+  const minButir = angka(opsi.minButir ?? 3);
+  return mesin.panggil<HasilSeleksi>(
+    `ps_seleksi_butir(${matriks(m, opsi.namaKolom)}, ${metode}, ${ambang},` +
+      ` ${alpha}, ${minButir})`,
+  );
+}

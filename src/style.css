@@ -1210,3 +1210,24 @@ code.rumus {
   stroke-linecap: round;
   opacity: 0.55;
 }
+
+/* --- Peta pilihan jawaban ------------------------------------------------- */
+
+.v-pilihan-kunci {
+  fill: var(--baik);
+  stroke: var(--latar-2);
+  stroke-width: 1;
+}
+
+.v-pilihan-pengecoh {
+  fill: var(--teks-samar);
+  stroke: var(--latar-2);
+  stroke-width: 1;
+  opacity: 0.55;
+}
+
+.v-pilihan-menyesatkan {
+  fill: var(--buruk);
+  stroke: var(--latar-2);
+  stroke-width: 1;
+}
