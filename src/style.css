@@ -1111,3 +1111,102 @@ code.rumus {
   color: var(--teks-samar);
   font-size: 0.8rem;
 }
+
+/* --- Zona impor berkas ---------------------------------------------------- */
+
+.zona-impor {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 12px 14px;
+  border: 1px dashed var(--garis);
+  border-radius: var(--radius-kecil);
+  background: var(--latar-3);
+  cursor: pointer;
+  transition: border-color 0.12s ease, background-color 0.12s ease;
+}
+
+.zona-impor:hover,
+.zona-impor:focus-visible {
+  border-color: var(--aksen);
+  outline: none;
+}
+
+.zona-impor.menerima {
+  border-color: var(--aksen);
+  border-style: solid;
+  background: color-mix(in srgb, var(--aksen) 12%, var(--latar-3));
+}
+
+.zona-impor.gagal {
+  border-color: var(--buruk);
+}
+
+.zona-judul {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--aksen);
+}
+
+.zona-petunjuk {
+  font-size: 0.72rem;
+  color: var(--teks-samar);
+  line-height: 1.45;
+}
+
+.berkas-tersembunyi {
+  display: none;
+}
+
+/* --- Peta panas muatan faktor --------------------------------------------- */
+
+.v-muatan-positif {
+  fill: var(--aksen);
+}
+
+.v-muatan-negatif {
+  fill: var(--buruk);
+}
+
+.v-muatan-terpilih {
+  fill: none;
+  stroke: var(--teks);
+  stroke-width: 1.6;
+}
+
+.v-muatan-teks {
+  fill: var(--teks);
+  font-family: var(--mono);
+  font-size: 10px;
+}
+
+/* --- Termometer SUS ------------------------------------------------------- */
+
+.v-pita-f {
+  fill: color-mix(in srgb, var(--buruk) 55%, transparent);
+}
+.v-pita-d {
+  fill: color-mix(in srgb, var(--buruk) 28%, transparent);
+}
+.v-pita-c {
+  fill: color-mix(in srgb, var(--hangat) 32%, transparent);
+}
+.v-pita-b {
+  fill: color-mix(in srgb, var(--baik) 30%, transparent);
+}
+.v-pita-a {
+  fill: color-mix(in srgb, var(--baik) 55%, transparent);
+}
+
+.v-penunjuk {
+  fill: var(--teks);
+  stroke: var(--latar-2);
+  stroke-width: 2.5;
+}
+
+.v-selang {
+  stroke: var(--teks);
+  stroke-width: 3;
+  stroke-linecap: round;
+  opacity: 0.55;
+}

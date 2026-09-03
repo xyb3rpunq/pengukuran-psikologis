@@ -31,6 +31,8 @@ export const id = {
     guttman: 'Guttman',
     likert: 'Likert',
     tabelR: 'Tabel r',
+    faktor: 'Analisis faktor',
+    sus: 'SUS',
     modul: 'Modul',
     metode: 'Metode',
   },
@@ -91,6 +93,15 @@ export const id = {
     validitasKriteria: 'Koefisien validitas alat pembanding',
     skorKriteria: 'Skor alat pembanding',
     jumlahButirDipilih: 'Banyak butir yang diinginkan',
+    banyakFaktor: 'Banyak faktor',
+    otomatisKaiser: 'Otomatis (kriteria Kaiser)',
+    rotasi: 'Rotasi',
+    rotasiVarimax: 'Varimax — faktor dianggap tidak berkorelasi',
+    rotasiPromax: 'Promax — faktor boleh berkorelasi',
+    rotasiTanpa: 'Tanpa rotasi',
+    batasMuatan: 'Batas muatan berarti',
+    imporBerkas: 'Impor berkas CSV',
+    petunjukImpor: 'Seret berkas ke sini, atau klik untuk memilih. Baris pertama boleh berisi nama butir.',
   },
   galat: {
     'data.kosong': 'Datanya kosong.',
@@ -108,6 +119,15 @@ export const id = {
     'skala.tidakDikenal': 'Metode yang diminta tidak dikenal.',
     'thurstone.penilaianDiLuarRentang': 'Penilaian juri di luar rentang skala.',
     'guttman.responBukanBiner': 'Respons skala Guttman hanya boleh 0 atau 1.',
+    'faktor.matriksSingular':
+      'Ada butir yang merupakan salinan atau kombinasi butir lain, sehingga ' +
+      'matriks korelasinya tidak bisa dibalik. Buang salah satunya lebih dulu.',
+    'faktor.terlaluBanyak':
+      'Faktor yang diminta lebih banyak daripada yang bisa ditaksir dari jumlah butir ini.',
+    'faktor.gagalKonvergen':
+      'Penaksiran tidak menemukan penyelesaian. Coba kurangi jumlah faktornya.',
+    'sus.bukanSepuluhButir': 'SUS selalu terdiri atas sepuluh butir, tidak kurang tidak lebih.',
+    'berkas.takTerbaca': 'Berkasnya tidak terbaca sebagai tabel angka.',
     'mesin.gagal': 'Mesin gagal menyelesaikan perhitungan.',
     'mesin.gagalMuat': 'Mesin R gagal dimuat.',
     'mesin.belumSiap': 'Mesin R belum siap.',
@@ -128,9 +148,20 @@ export const id = {
     cukup: 'Cukup',
     baik: 'Baik',
     baikSekali: 'Baik sekali',
+    takDiterima: 'Tidak diterima',
+    buruk: 'Buruk',
+    cukupan: 'Cukupan',
+    bagus: 'Bagus',
+    sangatBagus: 'Sangat bagus',
+    terburuk: 'Terburuk',
+    lumayan: 'Lumayan',
+    sangatBaik: 'Sangat baik',
+    terbaik: 'Terbaik',
+    marginal: 'Marginal',
+    diterima: 'Diterima',
   },
   beranda: {
-    judul: 'Sembilan alat hitung untuk satu mata kuliah',
+    judul: 'Sebelas alat hitung untuk satu mata kuliah',
     intro:
       'Setiap rumus di modul PSI307 ditulis ulang sebagai kode R, dijalankan di ' +
       'peramban lewat WebAssembly, dan diuji terhadap angka yang tercetak di ' +
@@ -144,6 +175,8 @@ export const id = {
     kartuLikert: 'Pembalikan butir unfavorable, indeks persentase, dan konsistensi internal.',
     kartuTabelR: 'Tabel r product moment untuk N berapa pun, bukan salinan lampiran buku.',
     kartuModul: 'Ringkasan empat belas sesi beserta rumus yang diajarkan di masing-masing.',
+    kartuFaktor: 'Bartlett, KMO, nilai eigen, dan muatan faktor untuk membuktikan validitas konstruk.',
+    kartuSus: 'System Usability Scale: skor, peringkat huruf, dan kedudukannya terhadap patokan 68.',
     angkaUji: 'uji lulus',
     angkaRumus: 'rumus psikometri',
     angkaSesi: 'sesi kuliah',
@@ -297,6 +330,89 @@ export const id = {
       'antar pilihan sama besar — andaian yang tidak dijamin datanya. Kolom rho ' +
       'Spearman disediakan agar keputusan tidak bergantung pada andaian itu saja.',
   },
+  faktor: {
+    judul: 'Analisis faktor eksploratori',
+    penjelasan:
+      'Sesi 5 menyebut analisis faktor sebagai bukti validitas konstruk tapi ' +
+      'menyerahkan hitungannya ke SPSS. Ini hitungannya, lengkap dengan dua ' +
+      'syarat kelayakan yang sering terlewat karena di SPSS ia tercetak ' +
+      'otomatis di atas hasilnya.',
+    bartlett: 'Uji kebolaan Bartlett',
+    bartlettPenjelasan:
+      'Menguji apakah matriks korelasinya cukup berbeda dari matriks ' +
+      'identitas untuk difaktorkan. Nilai p harus KECIL — bila p di atas ' +
+      '0,05, butir-butirnya saling bebas dan tidak ada faktor untuk ditemukan.',
+    kmo: 'Kaiser-Meyer-Olkin',
+    kmoPenjelasan:
+      'Mengukur berapa banyak korelasi antar butir yang tersisa setelah ' +
+      'pengaruh butir lain dikeluarkan. Di bawah 0,50 datanya tidak layak ' +
+      'difaktorkan, berapa pun faktor yang dipaksakan keluar.',
+    penentu: 'Penentu matriks',
+    khiKuadrat: 'Khi-kuadrat',
+    db: 'Derajat bebas',
+    nilaiP: 'Nilai p',
+    layak: 'Layak difaktorkan',
+    takLayak: 'Belum layak difaktorkan',
+    judulScree: 'Nilai eigen tiap faktor',
+    sumbuFaktor: 'nomor faktor — titik di atas garis dipertahankan',
+    judulMuatan: 'Muatan tiap butir pada tiap faktor',
+    kolomMsa: 'MSA',
+    kolomEigen: 'Eigen',
+    kolomProporsi: 'Proporsi ragam',
+    kolomKumulatif: 'Kumulatif',
+    kolomKomunalitas: 'Komunalitas',
+    kolomKeunikan: 'Keunikan',
+    kolomFaktorUtama: 'Masuk faktor',
+    kolomGanda: 'Muatan ganda',
+    banyakFaktor: 'Faktor terekstraksi',
+    ragamKumulatif: 'Ragam dijelaskan',
+    kecocokan: 'Kecocokan model',
+    cukup: 'Cukup',
+    belumCukup: 'Belum cukup',
+    catatanKecocokan:
+      'Pada uji kecocokan ini nilai p BESAR justru yang diinginkan, kebalikan ' +
+      'dari kebiasaan membaca nilai p. Hipotesis nolnya adalah bahwa sebanyak ' +
+      'ini faktor sudah cukup menjelaskan datanya.',
+    takBermuatan: 'Butir tanpa faktor',
+    bermuatanGanda: 'Butir bermuatan ganda',
+    catatanButir:
+      'Butir yang tidak mencapai ambang di faktor mana pun, dan butir yang ' +
+      'mencapainya di lebih dari satu faktor, sama-sama tidak jelas mengukur ' +
+      'apa. Dalam pengembangan skala keduanya biasanya dibuang.',
+    labelFaktor: 'Faktor',
+  },
+  sus: {
+    judul: 'System Usability Scale',
+    penjelasan:
+      'Sepuluh butir baku Brooke (1996), lima di antaranya sengaja ' +
+      'unfavorable. SUS adalah contoh terbaik dari yang diajarkan sesi 13: ' +
+      'tanpa pembalikan skor, angkanya tidak berarti apa-apa.',
+    skor: 'Skor SUS',
+    patokan: 'patokan 68',
+    peringkat: 'Peringkat',
+    adjektiva: 'Kata sifat',
+    keberterimaan: 'Keberterimaan',
+    persentil: 'Jenjang persentil',
+    selang: 'Selang kepercayaan 95%',
+    judulTermometer: 'Kedudukan skor pada skala SUS',
+    kolomSkor: 'Skor',
+    kolomPeringkat: 'Peringkat',
+    kolomAdjektiva: 'Kata sifat',
+    kolomKeberterimaan: 'Keberterimaan',
+    kolomRerataMentah: 'Rerata jawaban',
+    kolomSumbangan: 'Rerata sumbangan',
+    kolomArah: 'Arah',
+    diAtasPatokan: 'Di atas patokan',
+    diBawahPatokan: 'Di bawah patokan',
+    catatanBukanPersen:
+      'Skor SUS bukan persentase dan bukan nilai ujian. Angka 68 adalah ' +
+      'rerata ratusan penelitian terdahulu, jadi skor 70 yang terdengar ' +
+      'pas-pasan sebenarnya sudah di atas rata-rata.',
+    catatanPersentil:
+      'Jenjang persentil memakai hampiran normal dengan rerata 68 dan ' +
+      'simpangan baku 12,5. Hampiran, bukan tabel pasti — dibaca sebagai ' +
+      'perkiraan kedudukan, bukan peringkat yang tepat.',
+  },
   tabelR: {
     judul: 'Tabel r product moment',
     penjelasan:
@@ -413,6 +529,8 @@ export const en: Cermin<Kamus> = {
     guttman: 'Guttman',
     likert: 'Likert',
     tabelR: 'r table',
+    faktor: 'Factor analysis',
+    sus: 'SUS',
     modul: 'Modules',
     metode: 'Method',
   },
@@ -474,6 +592,15 @@ export const en: Cermin<Kamus> = {
     validitasKriteria: 'Validity coefficient of the criterion measure',
     skorKriteria: 'Criterion scores',
     jumlahButirDipilih: 'Number of items wanted',
+    banyakFaktor: 'Number of factors',
+    otomatisKaiser: 'Automatic (Kaiser criterion)',
+    rotasi: 'Rotation',
+    rotasiVarimax: 'Varimax — factors assumed uncorrelated',
+    rotasiPromax: 'Promax — factors allowed to correlate',
+    rotasiTanpa: 'No rotation',
+    batasMuatan: 'Meaningful loading threshold',
+    imporBerkas: 'Import a CSV file',
+    petunjukImpor: 'Drop a file here, or click to choose one. The first row may hold item names.',
   },
   galat: {
     'data.kosong': 'The data is empty.',
@@ -491,6 +618,15 @@ export const en: Cermin<Kamus> = {
     'skala.tidakDikenal': 'The requested method is not recognised.',
     'thurstone.penilaianDiLuarRentang': 'A judge rating falls outside the scale range.',
     'guttman.responBukanBiner': 'Guttman responses may only be 0 or 1.',
+    'faktor.matriksSingular':
+      'One item is a copy or a combination of others, so the correlation ' +
+      'matrix cannot be inverted. Drop one of them first.',
+    'faktor.terlaluBanyak':
+      'More factors were requested than this many items can support.',
+    'faktor.gagalKonvergen':
+      'The estimation found no solution. Try asking for fewer factors.',
+    'sus.bukanSepuluhButir': 'SUS always has exactly ten items, no more and no fewer.',
+    'berkas.takTerbaca': 'That file could not be read as a table of numbers.',
     'mesin.gagal': 'The engine could not finish the computation.',
     'mesin.gagalMuat': 'The R engine failed to load.',
     'mesin.belumSiap': 'The R engine is not ready yet.',
@@ -511,9 +647,20 @@ export const en: Cermin<Kamus> = {
     cukup: 'Adequate',
     baik: 'Good',
     baikSekali: 'Excellent',
+    takDiterima: 'Not acceptable',
+    buruk: 'Poor',
+    cukupan: 'Mediocre',
+    bagus: 'Meritorious',
+    sangatBagus: 'Marvellous',
+    terburuk: 'Worst imaginable',
+    lumayan: 'OK',
+    sangatBaik: 'Very good',
+    terbaik: 'Best imaginable',
+    marginal: 'Marginal',
+    diterima: 'Acceptable',
   },
   beranda: {
-    judul: 'Nine calculators for one course',
+    judul: 'Eleven calculators for one course',
     intro:
       'Every formula in the PSI307 modules rewritten as R code, run in the ' +
       'browser through WebAssembly, and tested against the numbers printed in ' +
@@ -528,6 +675,8 @@ export const en: Cermin<Kamus> = {
     kartuLikert: 'Reverse scoring, percentage index, and internal consistency.',
     kartuTabelR: 'The product-moment r table for any N, not a copy of a textbook appendix.',
     kartuModul: 'A summary of all fourteen sessions and the formulas each one teaches.',
+    kartuFaktor: 'Bartlett, KMO, eigenvalues, and factor loadings to evidence construct validity.',
+    kartuSus: 'System Usability Scale: score, letter grade, and where it sits against the 68 benchmark.',
     angkaUji: 'tests passing',
     angkaRumus: 'psychometric formulas',
     angkaSesi: 'course sessions',
@@ -680,6 +829,89 @@ export const en: Cermin<Kamus> = {
       'Likert responses are ordinal. Summing them assumes the gaps between ' +
       'options are equal — an assumption the data does not guarantee. The ' +
       'Spearman rho column is there so the decision need not rest on it alone.',
+  },
+  faktor: {
+    judul: 'Exploratory factor analysis',
+    penjelasan:
+      'Session 5 names factor analysis as evidence of construct validity but ' +
+      'leaves the arithmetic to SPSS. Here is the arithmetic, together with ' +
+      'the two adequacy checks people skip because SPSS prints them ' +
+      'automatically above the result.',
+    bartlett: 'Bartlett test of sphericity',
+    bartlettPenjelasan:
+      'Tests whether the correlation matrix differs enough from an identity ' +
+      'matrix to be worth factoring. The p value must be SMALL — above 0.05 ' +
+      'the items are mutually independent and there is no factor to find.',
+    kmo: 'Kaiser-Meyer-Olkin',
+    kmoPenjelasan:
+      'Measures how much correlation between items survives once the other ' +
+      'items are partialled out. Below 0.50 the data is not factorable, no ' +
+      'matter how many factors are forced out of it.',
+    penentu: 'Matrix determinant',
+    khiKuadrat: 'Chi-square',
+    db: 'Degrees of freedom',
+    nilaiP: 'p value',
+    layak: 'Factorable',
+    takLayak: 'Not yet factorable',
+    judulScree: 'Eigenvalue of each factor',
+    sumbuFaktor: 'factor number — points above the line are retained',
+    judulMuatan: 'Loading of each item on each factor',
+    kolomMsa: 'MSA',
+    kolomEigen: 'Eigenvalue',
+    kolomProporsi: 'Variance share',
+    kolomKumulatif: 'Cumulative',
+    kolomKomunalitas: 'Communality',
+    kolomKeunikan: 'Uniqueness',
+    kolomFaktorUtama: 'Belongs to',
+    kolomGanda: 'Cross-loading',
+    banyakFaktor: 'Factors extracted',
+    ragamKumulatif: 'Variance explained',
+    kecocokan: 'Model fit',
+    cukup: 'Sufficient',
+    belumCukup: 'Not sufficient',
+    catatanKecocokan:
+      'On this fit test a LARGE p value is the one you want, the opposite of ' +
+      'the usual habit. The null hypothesis is that this many factors already ' +
+      'explain the data.',
+    takBermuatan: 'Items with no factor',
+    bermuatanGanda: 'Cross-loading items',
+    catatanButir:
+      'An item that reaches the threshold on no factor, and an item that ' +
+      'reaches it on more than one, are equally unclear about what they ' +
+      'measure. Scale development usually drops both.',
+    labelFaktor: 'Factor',
+  },
+  sus: {
+    judul: 'System Usability Scale',
+    penjelasan:
+      'The ten standard items from Brooke (1996), five of them deliberately ' +
+      'unfavorable. SUS is the clearest example of what session 13 teaches: ' +
+      'without reverse scoring the number means nothing.',
+    skor: 'SUS score',
+    patokan: 'benchmark 68',
+    peringkat: 'Grade',
+    adjektiva: 'Adjective',
+    keberterimaan: 'Acceptability',
+    persentil: 'Percentile rank',
+    selang: '95% confidence interval',
+    judulTermometer: 'Where the score sits on the SUS scale',
+    kolomSkor: 'Score',
+    kolomPeringkat: 'Grade',
+    kolomAdjektiva: 'Adjective',
+    kolomKeberterimaan: 'Acceptability',
+    kolomRerataMentah: 'Mean answer',
+    kolomSumbangan: 'Mean contribution',
+    kolomArah: 'Direction',
+    diAtasPatokan: 'Above the benchmark',
+    diBawahPatokan: 'Below the benchmark',
+    catatanBukanPersen:
+      'A SUS score is not a percentage and not an exam mark. The number 68 is ' +
+      'the mean of hundreds of earlier studies, so a score of 70 that sounds ' +
+      'mediocre is in fact above average.',
+    catatanPersentil:
+      'The percentile rank uses a normal approximation with a mean of 68 and ' +
+      'a standard deviation of 12.5. An approximation, not an exact table — ' +
+      'read it as a rough standing, not a precise rank.',
   },
   tabelR: {
     judul: 'Product-moment r table',

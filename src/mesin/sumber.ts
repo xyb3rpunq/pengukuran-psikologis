@@ -20,6 +20,8 @@ import skor from '../../R/07-skor.R?raw';
 import thurstone from '../../R/08-thurstone.R?raw';
 import guttman from '../../R/09-guttman.R?raw';
 import likert from '../../R/10-likert.R?raw';
+import faktor from '../../R/11-faktor.R?raw';
+import sus from '../../R/12-sus.R?raw';
 
 export interface BerkasR {
   readonly nama: string;
@@ -38,6 +40,8 @@ export const SUMBER_R: readonly BerkasR[] = [
   { nama: '08-thurstone.R', isi: thurstone },
   { nama: '09-guttman.R', isi: guttman },
   { nama: '10-likert.R', isi: likert },
+  { nama: '11-faktor.R', isi: faktor },
+  { nama: '12-sus.R', isi: sus },
 ];
 
 /** Seluruh mesin sebagai satu blok R, siap dievaluasi sekali jalan. */

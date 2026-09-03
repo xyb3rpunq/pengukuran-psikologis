@@ -132,3 +132,48 @@ export function matriksKeTeks(m: readonly (readonly number[])[]): string {
 export function deretKeTeks(x: readonly number[]): string {
   return x.join(', ');
 }
+
+export interface BerkasTerbaca {
+  /** Baris data, sudah tanpa baris kepala bila ada. */
+  readonly baris: string;
+  /** Nama kolom dari baris kepala, atau undefined bila tidak ada. */
+  readonly namaKolom: string | undefined;
+}
+
+/**
+ * Baca isi berkas CSV atau TSV menjadi isi bidang.
+ *
+ * Baris pertama dianggap kepala tabel hanya bila ADA satu selnya yang bukan
+ * angka. Aturan ini sengaja tidak menebak lebih jauh: tabel yang barisnya
+ * semua angka memang tidak bisa dibedakan antara "ada kepala" dan "tidak",
+ * dan menebak salah berarti membuang satu responden tanpa memberi tahu.
+ */
+export function bacaBerkas(isi: string): BerkasTerbaca {
+  const baris = isi
+    .split(/\r?\n/)
+    .map((satu) => satu.trim())
+    .filter((satu) => satu.length > 0);
+  if (baris.length === 0) throw new RalatMasukan('berkas.takTerbaca');
+
+  // Baris kepala dibelah dengan aturan pemisah yang SAMA seperti baris data.
+  // Memakai aturan yang berbeda pernah membuat baris "1 2 3" terbaca sebagai
+  // satu sel yang bukan angka, lalu dikira kepala tabel — dan satu responden
+  // terbuang tanpa ada yang memberi tahu.
+  const pertama = baris[0] as string;
+  const sel = belahSel(pertama);
+  const adaKepala =
+    sel.length > 0 && sel.some((satu) => !Number.isFinite(Number(satu.replace(',', '.'))));
+
+  const isiData = adaKepala ? baris.slice(1) : baris;
+  if (isiData.length === 0) throw new RalatMasukan('berkas.takTerbaca');
+
+  // Diurai sekali di sini supaya berkas yang bukan tabel angka ditolak saat
+  // diimpor, bukan nanti saat tombol Hitung ditekan dan pengguna sudah lupa
+  // berkas mana yang ia buka.
+  bacaMatriks(isiData.join('\n'));
+
+  return {
+    baris: isiData.join('\n'),
+    namaKolom: adaKepala ? sel.join(', ') : undefined,
+  };
+}

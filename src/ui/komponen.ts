@@ -3,6 +3,7 @@
  */
 import { el } from './dom';
 import { angka, bulat, t } from '../i18n';
+import { RalatMasukan, bacaBerkas } from './masukan';
 
 export interface KolomTabel<T> {
   readonly kunci: string;
@@ -215,3 +216,79 @@ export function kotakCentang(
 }
 
 export { angka, bulat };
+
+/**
+ * Zona seret-dan-lepas untuk mengimpor berkas CSV.
+ *
+ * Menempel data dari Excel sudah bekerja, tapi orang yang punya berkas .csv
+ * harus membukanya dulu di suatu tempat untuk bisa menyalinnya. Zona ini
+ * memotong langkah itu. Seluruh pembacaan terjadi di dalam peramban lewat
+ * FileReader — berkasnya tidak pernah dikirim ke mana pun.
+ */
+export function zonaImpor(
+  bidangData: HTMLTextAreaElement,
+  bidangNama: HTMLInputElement | undefined,
+  saatGagal: (kode: string) => void,
+): HTMLElement {
+  const masukanBerkas = el('input', { tipe: 'file', kelas: 'berkas-tersembunyi' });
+  masukanBerkas.accept = '.csv,.tsv,.txt,text/csv,text/plain';
+
+  const zona = el(
+    'div',
+    { kelas: 'zona-impor', peran: 'button', judul: t('masukan.imporBerkas') },
+    el('span', { kelas: 'zona-judul' }, t('masukan.imporBerkas')),
+    el('span', { kelas: 'zona-petunjuk' }, t('masukan.petunjukImpor')),
+    masukanBerkas,
+  );
+  zona.tabIndex = 0;
+
+  function terapkan(isi: string): void {
+    try {
+      const hasil = bacaBerkas(isi);
+      bidangData.value = hasil.baris;
+      if (bidangNama !== undefined && hasil.namaKolom !== undefined) {
+        bidangNama.value = hasil.namaKolom;
+      }
+      zona.classList.remove('gagal');
+    } catch (galat) {
+      zona.classList.add('gagal');
+      saatGagal(galat instanceof RalatMasukan ? galat.kode : 'berkas.takTerbaca');
+    }
+  }
+
+  function muat(berkas: File | undefined): void {
+    if (berkas === undefined) return;
+    const pembaca = new FileReader();
+    pembaca.onload = () => terapkan(String(pembaca.result ?? ''));
+    pembaca.onerror = () => saatGagal('berkas.takTerbaca');
+    pembaca.readAsText(berkas);
+  }
+
+  masukanBerkas.addEventListener('change', () => {
+    muat(masukanBerkas.files?.[0]);
+    // Dikosongkan supaya memilih berkas yang sama dua kali tetap memicu event.
+    masukanBerkas.value = '';
+  });
+  zona.addEventListener('click', (peristiwa) => {
+    if (peristiwa.target !== masukanBerkas) masukanBerkas.click();
+  });
+  zona.addEventListener('keydown', (peristiwa) => {
+    const tombol = (peristiwa as KeyboardEvent).key;
+    if (tombol === 'Enter' || tombol === ' ') {
+      peristiwa.preventDefault();
+      masukanBerkas.click();
+    }
+  });
+  zona.addEventListener('dragover', (peristiwa) => {
+    peristiwa.preventDefault();
+    zona.classList.add('menerima');
+  });
+  zona.addEventListener('dragleave', () => zona.classList.remove('menerima'));
+  zona.addEventListener('drop', (peristiwa) => {
+    peristiwa.preventDefault();
+    zona.classList.remove('menerima');
+    muat((peristiwa as DragEvent).dataTransfer?.files?.[0]);
+  });
+
+  return zona;
+}

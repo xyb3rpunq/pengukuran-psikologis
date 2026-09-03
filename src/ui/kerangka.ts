@@ -22,8 +22,18 @@ export interface KonteksKalkulator {
 export interface OpsiKalkulator<M> {
   readonly judul: string;
   readonly penjelasan: string;
-  /** Panel masukan; memulangkan pembaca yang melempar RalatMasukan bila salah. */
-  readonly panel: () => { readonly simpul: HTMLElement; readonly baca: () => M };
+  /**
+   * Panel masukan; memulangkan pembaca yang melempar RalatMasukan bila salah.
+   *
+   * `laporGalat` diteruskan supaya bagian panel yang bisa gagal sendiri —
+   * impor berkas, misalnya — dapat menampilkan pesannya seketika, bukan
+   * menunggu pengguna menekan Hitung dan menemukan bidangnya kosong tanpa
+   * penjelasan.
+   */
+  readonly panel: (laporGalat: (kode: string) => void) => {
+    readonly simpul: HTMLElement;
+    readonly baca: () => M;
+  };
   readonly hitung: (mesin: Mesin, masukan: M) => Promise<HTMLElement>;
   /** Isi ulang panel dengan data contoh, lalu hitung sekali. */
   readonly muatContoh?: () => void;
@@ -35,7 +45,7 @@ export function bangunKalkulator<M>(
   konteks: KonteksKalkulator,
   opsi: OpsiKalkulator<M>,
 ): HTMLElement {
-  const { simpul: panelMasukan, baca } = opsi.panel();
+  const { simpul: panelMasukan, baca } = opsi.panel((kode) => tampilkanGalat(pesanGalat(kode)));
   const wadahHasil = el('div', { kelas: 'wadah-hasil' });
   const wadahGalat = el('div', { kelas: 'galat', aria: { live: 'polite' } });
   let sedangHitung = false;

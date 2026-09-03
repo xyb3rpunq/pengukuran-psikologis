@@ -9,6 +9,15 @@
 # Bagian dari: pengukuran-psikologis (PSI307)
 # ---------------------------------------------------------------------------
 
+# Kode galat yang dipakai berkas-berkas berikutnya:
+#   data.kosong, data.panjangBeda, data.minimalDua, data.bukanAngka,
+#   data.variansiNol, matriks.kosong, matriks.barisTidakSeragam,
+#   matriks.bukanDikotomi, matriks.minimalDuaAitem, matriks.minimalDuaResponden,
+#   nilai.diLuarRentang, nilai.harusPositif, skala.tidakDikenal,
+#   thurstone.penilaianDiLuarRentang, guttman.responBukanBiner,
+#   faktor.matriksSingular, faktor.terlaluBanyak, faktor.gagalKonvergen,
+#   sus.bukanSepuluhButir
+
 #' Lempar galat dengan kode yang bisa diterjemahkan.
 #'
 #' @param kode  string pendek, mis. "data.kosong"

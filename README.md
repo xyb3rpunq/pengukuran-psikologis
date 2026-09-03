@@ -13,7 +13,7 @@ Setiap rumus di modul **PSI307** ditulis ulang sebagai kode **R**, dijalankan di
 [![CI](https://github.com/xyb3rpunq/pengukuran-psikologis/actions/workflows/ci.yml/badge.svg)](https://github.com/xyb3rpunq/pengukuran-psikologis/actions/workflows/ci.yml)
 [![Deploy](https://github.com/xyb3rpunq/pengukuran-psikologis/actions/workflows/deploy.yml/badge.svg)](https://github.com/xyb3rpunq/pengukuran-psikologis/actions/workflows/deploy.yml)
 [![R](https://img.shields.io/badge/R-4.6.0%20di%20peramban-276DC3?logo=r&logoColor=white)](https://docs.r-wasm.org/webr/latest/)
-[![Uji](https://img.shields.io/badge/uji-162%20lulus-3fb950)](uji/)
+[![Uji](https://img.shields.io/badge/uji-208%20lulus-3fb950)](uji/)
 [![Konformansi](https://img.shields.io/badge/konformansi-numpy%20%2B%20scipy-4dd4c8)](conformance/)
 [![Bahasa](https://img.shields.io/badge/bahasa-ID%20%2B%20EN-7c6cf0)](src/i18n/kamus.ts)
 [![Lisensi](https://img.shields.io/badge/lisensi-MIT-blue)](LICENSE)
@@ -32,7 +32,7 @@ Mata kuliah **PSI307 Pengukuran Psikologis** mengajarkan empat belas sesi berisi
 
 Proyek ini menulis ulang seluruhnya sebagai kode R yang berjalan di dalam peramban — lalu membuktikan hasilnya benar dengan tiga cara berbeda.
 
-### Sembilan alat hitung
+### Sebelas alat hitung
 
 | Alat | Sesi | Yang dihitung |
 |---|---|---|
@@ -44,6 +44,8 @@ Proyek ini menulis ulang seluruhnya sebagai kode R yang berjalan di dalam peramb
 | **Guttman** | 11, 12 | Scalogram, error Goodenough, koefisien reprodusibilitas dan skalabilitas |
 | **Likert** | 13 | Pembalikan butir unfavorable, indeks persentase, alpha, rho Spearman |
 | **Tabel r** | 5, 14 | Nilai kritis product moment untuk N berapa pun, dihitung dari distribusi t |
+| **Analisis faktor** | 5, 2 | Bartlett, KMO dan MSA per butir, nilai eigen, muatan terotasi varimax atau promax, komunalitas, deteksi butir bermuatan ganda |
+| **SUS** | 13 | System Usability Scale: skor, peringkat huruf Sauro-Lewis, kata sifat Bangor, keberterimaan, jenjang persentil, selang kepercayaan |
 | **Peta modul** | 1–14 | Ringkasan tiap sesi, masing-masing dengan satu gambar |
 
 ### Kenapa R
@@ -58,7 +60,7 @@ Yang membuatnya bisa dijalankan tanpa memasang apa pun adalah **WebR** — R 4.6
 
 **2. Melawan identitas matematika.** Alpha Cronbach wajib sama persis dengan KR-20 pada data dikotomi. KR-21 tidak boleh melampaui KR-20. Reliabilitas belah dua wajib mengikuti Spearman-Brown. Kesamaan seperti ini tidak bisa lulus secara kebetulan.
 
-**3. Melawan numpy dan scipy.** Rumus yang sama ditulis ulang di Python, jawabannya diterbitkan sebagai vektor emas, lalu diadu dengan jawaban R sampai `1e-10`. Nilai kritis r di sisi Python datang dari `scipy.stats.t.ppf`, di sisi R dari `qt()` — dua rutin distribusi t yang tidak berbagi satu baris kode pun. 118 nilai N, lima matriks respons, semuanya bertemu.
+**3. Melawan numpy dan scipy.** Rumus yang sama ditulis ulang di Python, jawabannya diterbitkan sebagai vektor emas, lalu diadu dengan jawaban R sampai `1e-10`. Nilai kritis r di sisi Python datang dari `scipy.stats.t.ppf`, di sisi R dari `qt()` — dua rutin distribusi t yang tidak berbagi satu baris kode pun. 118 nilai N, enam matriks respons, dan seluruh nilai eigen sebuah matriks korelasi — semuanya bertemu.
 
 ### Yang ditemukan uji ini
 
@@ -78,8 +80,8 @@ Runtime R berukuran 46 MB, dan situs yang menunggunya sebelum menggambar apa pun
 
 | | |
 |---|---|
-| Bundel JavaScript | 198 kB, 60 kB setelah gzip |
-| CSS | 14 kB, 3,6 kB setelah gzip |
+| Bundel JavaScript | 241 kB, 73 kB setelah gzip |
+| CSS | 15 kB, 3,8 kB setelah gzip |
 | Pustaka grafik | tidak ada — seluruh visualisasi SVG ditulis tangan |
 | Kerangka kerja UI | tidak ada |
 | Permintaan jaringan saat menghitung | 0 |
@@ -89,7 +91,7 @@ Runtime R berukuran 46 MB, dan situs yang menunggunya sebelum menggambar apa pun
 
 ```bash
 npm install
-npm test          # 162 uji, menjalankan berkas R yang sama dengan situsnya
+npm test          # 208 uji, menjalankan berkas R yang sama dengan situsnya
 npm run periksa   # tsc --noEmit
 npm run dev       # pengembangan
 npm run build     # tipe, bundel, salin runtime R ke dist/webr
@@ -109,7 +111,7 @@ python conformance/referensi.py
 | `src/mesin/` | Jembatan ke WebR: penulis literal, permukaan bertipe, pemetaan galat |
 | `src/ui/` | Cangkang tanpa kerangka kerja, komponen, dan pustaka visualisasi SVG |
 | `src/i18n/` | Kamus dwibahasa — satu-satunya tempat kalimat berbahasa manusia |
-| `uji/` | 162 uji, dijalankan Vitest lewat WebR di Node |
+| `uji/` | 208 uji, dijalankan Vitest lewat WebR di Node |
 | `conformance/` | Implementasi pembanding numpy dan scipy, beserta vektor emasnya |
 
 ### Catatan hak cipta
@@ -140,7 +142,7 @@ What makes it run without installing anything is **WebR** — R 4.6.0 compiled t
 
 **2. Against mathematical identities.** Cronbach alpha must equal KR-20 exactly on dichotomous data. KR-21 must never exceed KR-20. Split-half reliability must follow Spearman-Brown. Identities like these cannot pass by accident.
 
-**3. Against numpy and scipy.** The same formulas rewritten in Python, published as golden vectors, matched against the R answers to `1e-10`. The critical r comes from `scipy.stats.t.ppf` on one side and `qt()` on the other — two t-distribution routines sharing no code. 118 values of N, five response matrices, all agreeing.
+**3. Against numpy and scipy.** The same formulas rewritten in Python, published as golden vectors, matched against the R answers to `1e-10`. The critical r comes from `scipy.stats.t.ppf` on one side and `qt()` on the other — two t-distribution routines sharing no code. 118 values of N, six response matrices, and every eigenvalue of a correlation matrix — all agreeing.
 
 ### What the tests caught
 
@@ -162,7 +164,7 @@ The R runtime is 46 MB, and a site that waits for it before drawing anything sit
 
 ```bash
 npm install
-npm test          # 162 tests, running the same R files as the site
+npm test          # 208 tests, running the same R files as the site
 npm run periksa   # tsc --noEmit
 npm run dev
 npm run build

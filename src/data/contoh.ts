@@ -129,3 +129,92 @@ export const SKOR_TES_BANDING: readonly number[] = [
 export const SKOR_KRITERIA_BANDING: readonly number[] = [
   75, 68, 82, 60, 87, 73, 66, 84, 71, 59, 85, 70, 72, 64, 81,
 ];
+
+/**
+ * Respons System Usability Scale: 24 responden, 10 butir baku, nilai 1..5.
+ *
+ * Disusun agar reratanya berada sedikit di atas patokan 68, sehingga halaman
+ * contohnya memperlihatkan kasus yang lulus — dan pembaca bisa melihat bahwa
+ * "lulus" pada SUS berarti melewati rerata penelitian terdahulu, bukan
+ * melewati angka 70 dari nilai ujian.
+ */
+export const RESPON_SUS: readonly (readonly number[])[] = [
+  [3, 4, 3, 2, 3, 3, 4, 2, 2, 3],
+  [5, 2, 4, 2, 5, 2, 4, 1, 4, 2],
+  [4, 3, 4, 3, 4, 1, 4, 1, 4, 1],
+  [3, 2, 5, 2, 4, 1, 4, 3, 4, 2],
+  [3, 2, 3, 3, 4, 2, 4, 3, 4, 3],
+  [5, 3, 4, 2, 4, 2, 5, 2, 4, 3],
+  [4, 2, 4, 1, 4, 2, 5, 3, 5, 2],
+  [4, 2, 5, 1, 4, 3, 5, 2, 5, 1],
+  [5, 1, 5, 1, 4, 1, 5, 2, 5, 1],
+  [4, 2, 5, 1, 4, 1, 5, 2, 5, 1],
+  [4, 2, 2, 3, 5, 3, 3, 2, 4, 4],
+  [4, 3, 4, 3, 4, 1, 5, 3, 5, 2],
+  [2, 3, 2, 4, 2, 4, 3, 3, 3, 4],
+  [4, 1, 4, 3, 5, 1, 4, 1, 5, 2],
+  [5, 1, 3, 2, 5, 1, 5, 1, 5, 2],
+  [4, 1, 4, 1, 5, 1, 4, 2, 5, 1],
+  [3, 4, 2, 3, 2, 2, 2, 4, 3, 4],
+  [4, 2, 4, 1, 3, 3, 5, 3, 5, 2],
+  [3, 2, 3, 2, 2, 3, 3, 2, 4, 3],
+  [5, 1, 3, 2, 4, 3, 4, 2, 5, 1],
+  [4, 1, 4, 2, 5, 2, 3, 1, 3, 2],
+  [4, 2, 4, 2, 4, 1, 4, 3, 5, 2],
+  [4, 2, 4, 2, 3, 2, 5, 2, 4, 2],
+  [4, 2, 4, 2, 3, 2, 3, 1, 4, 1],
+];
+
+/**
+ * Respons untuk analisis faktor: 40 responden, 8 butir, dua dimensi.
+ *
+ * Empat butir pertama dibangkitkan dari satu peubah tersembunyi dan empat
+ * berikutnya dari peubah lain, sehingga strukturnya memang ada untuk
+ * ditemukan. Tanpa struktur seperti itu, halaman contoh hanya akan
+ * memperlihatkan analisis faktor yang gagal — yang benar, tapi tidak
+ * mengajarkan apa-apa.
+ */
+export const RESPON_FAKTOR: readonly (readonly number[])[] = [
+  [4, 3, 4, 4, 5, 4, 3, 3],
+  [2, 2, 2, 2, 3, 3, 3, 3],
+  [3, 3, 2, 2, 1, 1, 3, 2],
+  [3, 2, 3, 2, 5, 4, 5, 3],
+  [2, 4, 3, 2, 3, 4, 3, 3],
+  [4, 4, 4, 5, 3, 3, 3, 3],
+  [4, 2, 3, 2, 2, 3, 3, 2],
+  [4, 4, 4, 5, 4, 4, 5, 4],
+  [2, 2, 2, 2, 4, 4, 4, 5],
+  [4, 5, 5, 5, 5, 4, 4, 5],
+  [3, 4, 4, 4, 4, 5, 4, 4],
+  [3, 4, 3, 3, 5, 5, 5, 5],
+  [3, 3, 4, 4, 3, 2, 3, 2],
+  [4, 3, 4, 3, 5, 5, 3, 5],
+  [3, 4, 4, 3, 3, 4, 3, 3],
+  [4, 5, 4, 5, 3, 3, 4, 4],
+  [2, 1, 1, 2, 4, 4, 4, 4],
+  [3, 3, 4, 4, 1, 1, 1, 1],
+  [2, 2, 2, 2, 4, 4, 3, 4],
+  [4, 3, 4, 3, 2, 2, 1, 1],
+  [4, 3, 3, 3, 1, 2, 2, 1],
+  [4, 2, 3, 3, 4, 5, 4, 5],
+  [4, 3, 3, 4, 3, 3, 4, 4],
+  [4, 4, 3, 3, 5, 5, 5, 5],
+  [4, 3, 4, 5, 5, 5, 4, 3],
+  [4, 3, 4, 3, 4, 4, 3, 5],
+  [3, 3, 3, 2, 3, 4, 3, 2],
+  [5, 3, 5, 3, 4, 3, 3, 4],
+  [3, 2, 3, 3, 1, 2, 3, 1],
+  [2, 2, 2, 2, 5, 5, 4, 5],
+  [5, 5, 4, 5, 3, 2, 3, 3],
+  [1, 1, 1, 1, 3, 3, 2, 3],
+  [4, 5, 3, 4, 4, 5, 5, 5],
+  [1, 3, 1, 2, 4, 4, 5, 5],
+  [1, 1, 1, 1, 3, 3, 3, 4],
+  [1, 1, 1, 1, 3, 3, 1, 2],
+  [3, 4, 3, 3, 1, 2, 3, 2],
+  [3, 5, 3, 4, 4, 4, 4, 3],
+  [4, 5, 4, 4, 4, 4, 4, 3],
+  [1, 3, 4, 3, 4, 3, 4, 3],
+];
+
+export const NAMA_BUTIR_FAKTOR = ['D1', 'D2', 'D3', 'D4', 'E1', 'E2', 'E3', 'E4'];

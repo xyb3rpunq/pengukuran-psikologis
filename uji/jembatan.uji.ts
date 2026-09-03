@@ -213,3 +213,59 @@ describe('pemetaan galat', () => {
     expect(await mesin.panggil<number>('ps_rerata(c(1, 2, 3))')).toBe(2);
   });
 });
+
+describe('impor berkas CSV', () => {
+  it('membaca tabel angka polos tanpa membuang barisnya', async () => {
+    const { bacaBerkas } = await import('../src/ui/masukan');
+    const hasil = bacaBerkas('1,2,3\n4,5,6\n7,8,9');
+    expect(hasil.namaKolom).toBeUndefined();
+    expect(hasil.baris.split('\n')).toHaveLength(3);
+  });
+
+  it('mengenali baris kepala dan memindahkannya ke nama butir', async () => {
+    const { bacaBerkas } = await import('../src/ui/masukan');
+    const hasil = bacaBerkas('B1,B2,B3\n1,2,3\n4,5,6');
+    expect(hasil.namaKolom).toBe('B1, B2, B3');
+    expect(hasil.baris.split('\n')).toHaveLength(2);
+  });
+
+  it('tidak menebak adanya kepala pada tabel yang seluruhnya angka', async () => {
+    // Tabel yang barisnya semua angka memang tidak bisa dibedakan antara
+    // "ada kepala" dan "tidak". Menebak salah berarti membuang satu responden
+    // tanpa memberi tahu siapa pun.
+    const { bacaBerkas } = await import('../src/ui/masukan');
+    const hasil = bacaBerkas('1 2 3\n4 5 6');
+    expect(hasil.namaKolom).toBeUndefined();
+    expect(hasil.baris.split('\n')).toHaveLength(2);
+  });
+
+  it('menerima pemisah tab dari tempelan Excel', async () => {
+    const { bacaBerkas } = await import('../src/ui/masukan');
+    const hasil = bacaBerkas('A\tB\n1\t2\n3\t4');
+    expect(hasil.namaKolom).toBe('A, B');
+  });
+
+  it('menolak berkas yang bukan tabel angka', async () => {
+    const { bacaBerkas } = await import('../src/ui/masukan');
+    expect(() => bacaBerkas('halo dunia\nini bukan tabel')).toThrow();
+  });
+
+  it('menolak berkas kosong', async () => {
+    const { bacaBerkas } = await import('../src/ui/masukan');
+    expect(() => bacaBerkas('   \n\n  ')).toThrow();
+  });
+
+  it('menolak berkas yang barisnya tidak seragam', async () => {
+    const { bacaBerkas } = await import('../src/ui/masukan');
+    expect(() => bacaBerkas('1,2,3\n4,5')).toThrow();
+  });
+
+  it('membaca desimal koma bila pemisah kolomnya titik koma', async () => {
+    const { bacaBerkas, bacaMatriks } = await import('../src/ui/masukan');
+    const hasil = bacaBerkas('1,5;2,5\n3,5;4,5');
+    expect(bacaMatriks(hasil.baris)).toEqual([
+      [1.5, 2.5],
+      [3.5, 4.5],
+    ]);
+  });
+});

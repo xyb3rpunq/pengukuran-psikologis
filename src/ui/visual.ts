@@ -669,3 +669,225 @@ export function duaKolom(
 
   return svg;
 }
+
+// --- Scree plot -----------------------------------------------------------
+
+export interface TitikEigen {
+  readonly faktor: number;
+  readonly eigen: number;
+  readonly diPertahankan: boolean;
+}
+
+/**
+ * Nilai eigen terhadap nomor faktor, dengan garis Kaiser di ketinggian satu.
+ *
+ * Gambar ini menjawab satu pertanyaan yang tidak bisa dijawab tabel: berapa
+ * banyak faktor yang pantas dipertahankan. Kriteria Kaiser membaca berapa
+ * titik yang berada di atas garis; kriteria siku membaca di mana kurvanya
+ * mendatar. Keduanya sering tidak sepakat, dan ketidaksepakatan itu sendiri
+ * adalah informasi yang layak dilihat.
+ */
+export function screePlot(judul: string, sumbuY: string, titik: readonly TitikEigen[]): SVGSVGElement {
+  const L = 560;
+  const T = 320;
+  const pad = { kiri: 52, kanan: 20, atas: 20, bawah: 46 };
+  const svg = kanvas(L, T, judul);
+  if (titik.length === 0) return svg;
+
+  const maks = Math.max(1.2, ...titik.map((t) => t.eigen));
+  const keX = (i: number): number =>
+    pad.kiri + (titik.length === 1 ? 0.5 : i / (titik.length - 1)) * (L - pad.kiri - pad.kanan);
+  const keY = (v: number): number =>
+    T - pad.bawah - (v / maks) * (T - pad.atas - pad.bawah);
+
+  for (let i = 0; i <= 4; i += 1) {
+    const nilai = (maks * i) / 4;
+    svg.appendChild(
+      s('line', { x1: pad.kiri, y1: keY(nilai), x2: L - pad.kanan, y2: keY(nilai), class: 'v-kisi' }),
+    );
+    svg.appendChild(label(pad.kiri - 8, keY(nilai) + 4, nilai.toFixed(1), 'v-angka', 'end'));
+  }
+
+  // Garis Kaiser: sebuah faktor layak dipertahankan hanya bila ia menjelaskan
+  // lebih banyak daripada satu butir tunggal, yakni nilai eigennya di atas 1.
+  svg.appendChild(
+    s('line', { x1: pad.kiri, y1: keY(1), x2: L - pad.kanan, y2: keY(1), class: 'v-ambang' }),
+  );
+  svg.appendChild(label(L - pad.kanan, keY(1) - 6, '1', 'v-angka', 'end'));
+
+  const jalur = titik
+    .map((t, i) => `${i === 0 ? 'M' : 'L'} ${keX(i)} ${keY(t.eigen)}`)
+    .join(' ');
+  svg.appendChild(s('path', { d: jalur, class: 'v-kurva' }));
+
+  titik.forEach((t, i) => {
+    svg.appendChild(
+      s('circle', {
+        cx: keX(i),
+        cy: keY(t.eigen),
+        r: 5,
+        class: t.diPertahankan ? 'v-titik-baik' : 'v-titik',
+      }),
+    );
+    svg.appendChild(label(keX(i), T - pad.bawah + 18, String(t.faktor), 'v-angka'));
+  });
+
+  svg.appendChild(label((L + pad.kiri) / 2, T - 10, sumbuY, 'v-label'));
+  return svg;
+}
+
+// --- Peta panas muatan faktor ---------------------------------------------
+
+export interface BarisMuatan {
+  readonly butir: string;
+  readonly muatan: readonly number[];
+  readonly faktor: number | null;
+}
+
+/**
+ * Muatan tiap butir pada tiap faktor sebagai peta panas.
+ *
+ * Struktur faktor yang bersih terlihat sebagai blok-blok pekat yang tidak
+ * bertumpang tindih. Butir yang pucat di semua kolom tidak dijelaskan faktor
+ * mana pun; butir yang pekat di dua kolom sekaligus tidak jelas miliknya
+ * siapa. Keduanya biasanya dibuang, dan keduanya lebih cepat terlihat di sini
+ * daripada di tabel angka.
+ */
+export function petaMuatan(
+  judul: string,
+  labelFaktor: string,
+  batas: number,
+  baris: readonly BarisMuatan[],
+): SVGSVGElement {
+  const banyakFaktor = baris[0]?.muatan.length ?? 0;
+  const lebarSel = 74;
+  const tinggiSel = 26;
+  const kiri = 62;
+  const atas = 34;
+  const L = kiri + banyakFaktor * lebarSel + 16;
+  const T = atas + baris.length * tinggiSel + 12;
+  const svg = kanvas(L, T, judul);
+
+  for (let f = 0; f < banyakFaktor; f += 1) {
+    svg.appendChild(
+      label(kiri + f * lebarSel + lebarSel / 2, atas - 12, `${labelFaktor} ${f + 1}`, 'v-angka'),
+    );
+  }
+
+  baris.forEach((satu, i) => {
+    const y = atas + i * tinggiSel;
+    svg.appendChild(label(kiri - 8, y + tinggiSel / 2 + 4, satu.butir, 'v-titik-label', 'end'));
+    satu.muatan.forEach((nilai, f) => {
+      const kuat = Math.min(1, Math.abs(nilai));
+      const x = kiri + f * lebarSel;
+      svg.appendChild(
+        s('rect', {
+          x: x + 2,
+          y: y + 2,
+          width: lebarSel - 4,
+          height: tinggiSel - 4,
+          rx: 3,
+          class: nilai < 0 ? 'v-muatan-negatif' : 'v-muatan-positif',
+          'fill-opacity': (0.08 + 0.82 * kuat).toFixed(3),
+        }),
+      );
+      if (Math.abs(nilai) >= batas) {
+        svg.appendChild(
+          s('rect', {
+            x: x + 2,
+            y: y + 2,
+            width: lebarSel - 4,
+            height: tinggiSel - 4,
+            rx: 3,
+            class: 'v-muatan-terpilih',
+          }),
+        );
+      }
+      svg.appendChild(
+        label(x + lebarSel / 2, y + tinggiSel / 2 + 4, nilai.toFixed(2), 'v-muatan-teks'),
+      );
+    });
+  });
+
+  return svg;
+}
+
+// --- Termometer SUS -------------------------------------------------------
+
+export interface PitaSus {
+  readonly dari: number;
+  readonly sampai: number;
+  readonly kelas: string;
+  readonly label: string;
+}
+
+/**
+ * Skor SUS di atas skala 0..100 beserta pita peringkatnya.
+ *
+ * Yang dijawab gambar ini adalah salah paham paling umum tentang SUS: bahwa
+ * 70 itu nilai pas-pasan. Begitu skor 70 terlihat berdiri di sebelah kanan
+ * garis patokan 68, salah paham itu selesai tanpa perlu dijelaskan.
+ */
+export function termometerSus(
+  judul: string,
+  labelPatokan: string,
+  skor: number,
+  selang: { readonly bawah: number | null; readonly atas: number | null },
+  pita: readonly PitaSus[],
+): SVGSVGElement {
+  const L = 640;
+  const T = 148;
+  const kiri = 24;
+  const kanan = L - 24;
+  const yPita = 54;
+  const tinggiPita = 30;
+  const svg = kanvas(L, T, judul);
+
+  const keX = (nilai: number): number =>
+    kiri + (Math.max(0, Math.min(100, nilai)) / 100) * (kanan - kiri);
+
+  for (const satu of pita) {
+    svg.appendChild(
+      s('rect', {
+        x: keX(satu.dari),
+        y: yPita,
+        width: Math.max(1, keX(satu.sampai) - keX(satu.dari)),
+        height: tinggiPita,
+        class: satu.kelas,
+      }),
+    );
+    if (keX(satu.sampai) - keX(satu.dari) > 34) {
+      svg.appendChild(
+        label((keX(satu.dari) + keX(satu.sampai)) / 2, yPita + 19, satu.label, 'v-angka-kecil'),
+      );
+    }
+  }
+
+  for (const tanda of [0, 25, 50, 75, 100]) {
+    svg.appendChild(label(keX(tanda), yPita + tinggiPita + 16, String(tanda), 'v-angka'));
+  }
+
+  // Garis patokan 68: rerata seluruh penelitian SUS yang pernah dihimpun.
+  svg.appendChild(
+    s('line', { x1: keX(68), y1: yPita - 10, x2: keX(68), y2: yPita + tinggiPita + 4, class: 'v-ambang' }),
+  );
+  svg.appendChild(label(keX(68), yPita - 14, labelPatokan, 'v-angka'));
+
+  if (selang.bawah !== null && selang.atas !== null) {
+    svg.appendChild(
+      s('line', {
+        x1: keX(selang.bawah),
+        y1: yPita + tinggiPita / 2,
+        x2: keX(selang.atas),
+        y2: yPita + tinggiPita / 2,
+        class: 'v-selang',
+      }),
+    );
+  }
+
+  svg.appendChild(
+    s('circle', { cx: keX(skor), cy: yPita + tinggiPita / 2, r: 8, class: 'v-penunjuk' }),
+  );
+  svg.appendChild(label(keX(skor), T - 14, skor.toFixed(1), 'v-penanda-label'));
+  return svg;
+}

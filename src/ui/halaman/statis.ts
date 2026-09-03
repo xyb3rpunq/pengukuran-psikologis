@@ -25,6 +25,8 @@ function pintu(): readonly Pintu[] {
     { rute: '#/thurstone', judul: t('nav.thurstone'), isi: t('beranda.kartuThurstone'), ikon: 'S·Q' },
     { rute: '#/guttman', judul: t('nav.guttman'), isi: t('beranda.kartuGuttman'), ikon: 'Kr' },
     { rute: '#/likert', judul: t('nav.likert'), isi: t('beranda.kartuLikert'), ikon: '1–5' },
+    { rute: '#/faktor', judul: t('nav.faktor'), isi: t('beranda.kartuFaktor'), ikon: 'KMO' },
+    { rute: '#/sus', judul: t('nav.sus'), isi: t('beranda.kartuSus'), ikon: 'SUS' },
     { rute: '#/tabel-r', judul: t('nav.tabelR'), isi: t('beranda.kartuTabelR'), ikon: 'r∗' },
     { rute: '#/modul', judul: t('nav.modul'), isi: t('beranda.kartuModul'), ikon: '14' },
   ];
@@ -43,7 +45,7 @@ export function halamanBeranda(): HTMLElement {
       el(
         'div',
         { kelas: 'angka-baris' },
-        el('div', { kelas: 'angka-ringkas' }, el('strong', {}, '162'), el('span', {}, t('beranda.angkaUji'))),
+        el('div', { kelas: 'angka-ringkas' }, el('strong', {}, '208'), el('span', {}, t('beranda.angkaUji'))),
         el('div', { kelas: 'angka-ringkas' }, el('strong', {}, '30+'), el('span', {}, t('beranda.angkaRumus'))),
         el('div', { kelas: 'angka-ringkas' }, el('strong', {}, String(SESI.length)), el('span', {}, t('beranda.angkaSesi'))),
         el('div', { kelas: 'angka-ringkas' }, el('strong', {}, '0'), el('span', {}, t('beranda.angkaJaringan'))),

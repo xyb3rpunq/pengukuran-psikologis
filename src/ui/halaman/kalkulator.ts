@@ -16,6 +16,7 @@ import {
   papanAngka,
   pilihan,
   tabel,
+  zonaImpor,
 } from '../komponen';
 import { bacaDeret, bacaFavorable, bacaLabel, bacaMatriks, matriksKeTeks } from '../masukan';
 import { bangunKalkulator, type KonteksKalkulator } from '../kerangka';
@@ -44,7 +45,7 @@ export function halamanAitem(konteks: KonteksKalkulator): HTMLElement {
     judul: t('aitem.judul'),
     penjelasan: t('aitem.penjelasan'),
     hitungOtomatis: true,
-    panel: () => {
+    panel: (laporGalat) => {
       const data = bidangTeks(
         t('masukan.judulMatriks'),
         t('masukan.petunjukMatriks'),
@@ -66,7 +67,14 @@ export function halamanAitem(konteks: KonteksKalkulator): HTMLElement {
         'auto',
       );
       return {
-        simpul: el('div', { kelas: 'panel-isi' }, data.pembungkus, nama.pembungkus, kelompok.pembungkus),
+        simpul: el(
+          'div',
+          { kelas: 'panel-isi' },
+          zonaImpor(data.bidang, nama.bidang, laporGalat),
+          data.pembungkus,
+          nama.pembungkus,
+          kelompok.pembungkus,
+        ),
         baca: () => ({
           matriks: bacaMatriks(data.bidang.value),
           namaKolom: bacaLabel(nama.bidang.value),
@@ -167,7 +175,7 @@ export function halamanValiditas(konteks: KonteksKalkulator): HTMLElement {
     judul: t('validitas.judul'),
     penjelasan: t('validitas.penjelasan'),
     hitungOtomatis: true,
-    panel: () => {
+    panel: (laporGalat) => {
       const data = bidangTeks(
         t('masukan.judulMatriks'),
         t('masukan.petunjukMatriks'),
@@ -192,6 +200,7 @@ export function halamanValiditas(konteks: KonteksKalkulator): HTMLElement {
         simpul: el(
           'div',
           { kelas: 'panel-isi' },
+          zonaImpor(data.bidang, nama.bidang, laporGalat),
           data.pembungkus,
           nama.pembungkus,
           taraf.pembungkus,
@@ -278,7 +287,7 @@ export function halamanReliabilitas(konteks: KonteksKalkulator): HTMLElement {
     judul: t('reliabilitas.judul'),
     penjelasan: t('reliabilitas.penjelasan'),
     hitungOtomatis: true,
-    panel: () => {
+    panel: (laporGalat) => {
       const data = bidangTeks(
         t('masukan.judulMatriks'),
         t('masukan.petunjukMatriks'),
@@ -291,7 +300,13 @@ export function halamanReliabilitas(konteks: KonteksKalkulator): HTMLElement {
         contoh.NAMA_BUTIR_TES.join(', '),
       );
       return {
-        simpul: el('div', { kelas: 'panel-isi' }, data.pembungkus, nama.pembungkus),
+        simpul: el(
+          'div',
+          { kelas: 'panel-isi' },
+          zonaImpor(data.bidang, nama.bidang, laporGalat),
+          data.pembungkus,
+          nama.pembungkus,
+        ),
         baca: () => ({
           matriks: bacaMatriks(data.bidang.value),
           namaKolom: bacaLabel(nama.bidang.value),
@@ -388,7 +403,7 @@ export function halamanSkor(konteks: KonteksKalkulator): HTMLElement {
     judul: t('skor.judul'),
     penjelasan: t('skor.penjelasan'),
     hitungOtomatis: true,
-    panel: () => {
+    panel: (laporGalat) => {
       const data = bidangTeks(
         t('umum.data'),
         t('masukan.petunjukDeret'),
@@ -403,7 +418,14 @@ export function halamanSkor(konteks: KonteksKalkulator): HTMLElement {
       );
       const populasi = kotakCentang(t('masukan.perlakuanPopulasi'), true);
       return {
-        simpul: el('div', { kelas: 'panel-isi' }, data.pembungkus, nama.pembungkus, populasi.pembungkus),
+        simpul: el(
+          'div',
+          { kelas: 'panel-isi' },
+          zonaImpor(data.bidang, undefined, laporGalat),
+          data.pembungkus,
+          nama.pembungkus,
+          populasi.pembungkus,
+        ),
         baca: () => ({
           skor: bacaDeret(data.bidang.value),
           nama: bacaLabel(nama.bidang.value),
@@ -485,7 +507,7 @@ export function halamanThurstone(konteks: KonteksKalkulator): HTMLElement {
     judul: t('thurstone.judul'),
     penjelasan: t('thurstone.penjelasan'),
     hitungOtomatis: true,
-    panel: () => {
+    panel: (laporGalat) => {
       const data = bidangTeks(
         t('masukan.judulMatriks'),
         t('masukan.petunjukMatriks'),
@@ -503,6 +525,7 @@ export function halamanThurstone(konteks: KonteksKalkulator): HTMLElement {
         simpul: el(
           'div',
           { kelas: 'panel-isi' },
+          zonaImpor(data.bidang, nama.bidang, laporGalat),
           data.pembungkus,
           nama.pembungkus,
           skala.pembungkus,
@@ -594,7 +617,7 @@ export function halamanGuttman(konteks: KonteksKalkulator): HTMLElement {
     judul: t('guttman.judul'),
     penjelasan: t('guttman.penjelasan'),
     hitungOtomatis: true,
-    panel: () => {
+    panel: (laporGalat) => {
       const data = bidangTeks(
         t('masukan.judulMatriks'),
         t('masukan.petunjukMatriks'),
@@ -607,7 +630,13 @@ export function halamanGuttman(konteks: KonteksKalkulator): HTMLElement {
         contoh.NAMA_BUTIR_GUTTMAN.join(', '),
       );
       return {
-        simpul: el('div', { kelas: 'panel-isi' }, data.pembungkus, nama.pembungkus),
+        simpul: el(
+          'div',
+          { kelas: 'panel-isi' },
+          zonaImpor(data.bidang, nama.bidang, laporGalat),
+          data.pembungkus,
+          nama.pembungkus,
+        ),
         baca: () => ({
           matriks: bacaMatriks(data.bidang.value),
           namaKolom: bacaLabel(nama.bidang.value),
@@ -696,7 +725,7 @@ export function halamanLikert(konteks: KonteksKalkulator): HTMLElement {
     judul: t('likert.judul'),
     penjelasan: t('likert.penjelasan'),
     hitungOtomatis: true,
-    panel: () => {
+    panel: (laporGalat) => {
       const data = bidangTeks(
         t('masukan.judulMatriks'),
         t('masukan.petunjukMatriks'),
@@ -727,6 +756,7 @@ export function halamanLikert(konteks: KonteksKalkulator): HTMLElement {
         simpul: el(
           'div',
           { kelas: 'panel-isi' },
+          zonaImpor(data.bidang, nama.bidang, laporGalat),
           data.pembungkus,
           nama.pembungkus,
           kategori.pembungkus,
@@ -856,7 +886,7 @@ export function halamanTabelR(konteks: KonteksKalkulator): HTMLElement {
     judul: t('tabelR.judul'),
     penjelasan: t('tabelR.penjelasan'),
     hitungOtomatis: true,
-    panel: () => {
+    panel: (_laporGalat) => {
       const dari = bidangSatuBaris(t('tabelR.dari'), '', '3');
       const sampai = bidangSatuBaris(t('tabelR.sampai'), '', '100');
       return {

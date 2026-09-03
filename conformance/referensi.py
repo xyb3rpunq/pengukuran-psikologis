@@ -170,6 +170,47 @@ def persentil_spss(x: np.ndarray, p: float) -> float:
     return float(urut[bawah - 1] + (h - bawah) * (urut[bawah] - urut[bawah - 1]))
 
 
+def bartlett(m: np.ndarray) -> dict:
+    """Uji kebolaan Bartlett dari matriks korelasi."""
+    n, p = m.shape
+    R = np.corrcoef(m, rowvar=False)
+    penentu = float(np.linalg.det(R))
+    khi = float(-(n - 1 - (2 * p + 5) / 6) * np.log(penentu))
+    db = p * (p - 1) // 2
+    return {
+        "penentu": penentu,
+        "khiKuadrat": khi,
+        "db": db,
+        "p": float(stats.chi2.sf(khi, db)),
+    }
+
+
+def kmo(m: np.ndarray) -> dict:
+    """Kaiser-Meyer-Olkin keseluruhan dan per butir."""
+    R = np.corrcoef(m, rowvar=False)
+    kebalikan = np.linalg.inv(R)
+    akar = np.sqrt(np.diag(kebalikan))
+    parsial = -kebalikan / np.outer(akar, akar)
+    np.fill_diagonal(parsial, 0.0)
+    Rt = R.copy()
+    np.fill_diagonal(Rt, 0.0)
+
+    jumlah_r = float((Rt**2).sum())
+    jumlah_p = float((parsial**2).sum())
+    per_butir = []
+    for j in range(m.shape[1]):
+        r = float((Rt[j] ** 2).sum())
+        q = float((parsial[j] ** 2).sum())
+        per_butir.append(r / (r + q))
+    return {"kmo": jumlah_r / (jumlah_r + jumlah_p), "msa": per_butir}
+
+
+def nilai_eigen(m: np.ndarray) -> list[float]:
+    R = np.corrcoef(m, rowvar=False)
+    nilai = np.linalg.eigvalsh(R)[::-1]
+    return [float(v) for v in nilai]
+
+
 # --- Perakitan vektor emas -------------------------------------------------
 
 
@@ -267,6 +308,27 @@ def bangun() -> dict:
                 "z": z.tolist(),
                 "t": (50 + 10 * z).tolist(),
                 "stanine": [int(min(9, max(1, round(2 * nilai + 5)))) for nilai in z],
+            },
+        }
+    )
+
+
+    # 6. Analisis faktor: kelayakan dan nilai eigen atas data dua dimensi.
+    #    factanal() dan sepupunya di Python memakai penaksir yang berbeda dan
+    #    tidak bisa diadu langsung, tapi tiga hal yang mendahuluinya bisa —
+    #    dan justru tiga hal itulah yang menentukan apakah pemfaktorannya
+    #    boleh dikerjakan sama sekali.
+    faktor_mentah = matriks_likert(40, 8, 4242)
+    fm = np.array(faktor_mentah, dtype=float)
+    kasus.append(
+        {
+            "jenis": "faktor",
+            "nama": "faktor-4242",
+            "matriks": faktor_mentah,
+            "harapan": {
+                "bartlett": bartlett(fm),
+                "kmo": kmo(fm),
+                "eigen": nilai_eigen(fm),
             },
         }
     )

@@ -397,3 +397,166 @@ export function analisisLikert(
     `ps_analisis_likert(${matriks(m, opsi.namaKolom)}, ${favorable}, ${kategori})`,
   );
 }
+
+// --- Analisis faktor -------------------------------------------------------
+
+export type KategoriKmo =
+  | 'takDiterima'
+  | 'buruk'
+  | 'cukupan'
+  | 'sedang'
+  | 'bagus'
+  | 'sangatBagus';
+
+export interface HasilBartlett {
+  n: number;
+  banyakButir: number;
+  penentu: number;
+  khiKuadrat: number;
+  db: number;
+  p: number;
+  layak: boolean;
+}
+
+export interface ButirKmo {
+  butir: string;
+  msa: number;
+  kategori: KategoriKmo | null;
+  layak: boolean;
+}
+
+export interface HasilKmo {
+  kmo: number;
+  kategori: KategoriKmo | null;
+  layak: boolean;
+  butir: ButirKmo[];
+}
+
+export interface BarisEigen {
+  faktor: number;
+  eigen: number;
+  proporsi: number;
+  kumulatif: number;
+  diPertahankan: boolean;
+}
+
+export interface ButirFaktor {
+  butir: string;
+  komunalitas: number;
+  keunikan: number;
+  muatanTertinggi: number;
+  faktor: number | null;
+  bermuatanGanda: boolean;
+  [muatan: string]: string | number | boolean | null;
+}
+
+export interface HasilFaktor {
+  n: number;
+  banyakButir: number;
+  banyakFaktor: number;
+  maksimumFaktor: number;
+  rotasi: string;
+  batasMuatan: number;
+  khiKuadrat: number | null;
+  db: number | null;
+  pKecocokan: number | null;
+  modelCukup: boolean;
+  ragamPerFaktor: number[];
+  ragamKumulatif: number;
+  eigen: BarisEigen[];
+  butir: ButirFaktor[];
+  banyakTakBermuatan: number;
+  banyakBermuatanGanda: number;
+}
+
+export interface HasilNormalitas {
+  n: number;
+  w: number;
+  p: number;
+  normal: boolean;
+}
+
+export function bartlett(mesin: Mesin, m: readonly (readonly number[])[]) {
+  return mesin.panggil<HasilBartlett>(`ps_bartlett(${matriks(m)})`);
+}
+
+export function kmo(
+  mesin: Mesin,
+  m: readonly (readonly number[])[],
+  namaKolom?: readonly string[],
+) {
+  return mesin.panggil<HasilKmo>(`ps_kmo(${matriks(m, namaKolom)})`);
+}
+
+export function nilaiEigen(mesin: Mesin, m: readonly (readonly number[])[]) {
+  return mesin.panggil<BarisEigen[]>(`ps_nilai_eigen(${matriks(m)})`);
+}
+
+export function analisisFaktor(
+  mesin: Mesin,
+  m: readonly (readonly number[])[],
+  opsi: {
+    banyakFaktor?: number | undefined;
+    rotasi?: 'varimax' | 'promax' | 'none';
+    batasMuatan?: number;
+    namaKolom?: readonly string[];
+  } = {},
+) {
+  const jumlah = opsi.banyakFaktor === undefined ? 'NULL' : angka(opsi.banyakFaktor);
+  const rotasi = teks(opsi.rotasi ?? 'varimax');
+  const batas = angka(opsi.batasMuatan ?? 0.4);
+  return mesin.panggil<HasilFaktor>(
+    `ps_analisis_faktor(${matriks(m, opsi.namaKolom)}, ${jumlah}, ${rotasi}, ${batas})`,
+  );
+}
+
+export function normalitas(mesin: Mesin, x: readonly number[]) {
+  return mesin.panggil<HasilNormalitas>(`ps_normalitas(${vektor(x)})`);
+}
+
+// --- System Usability Scale ------------------------------------------------
+
+export type PeringkatSus =
+  | 'A+' | 'A' | 'A-' | 'B+' | 'B' | 'B-' | 'C+' | 'C' | 'C-' | 'D' | 'F';
+export type AdjektivaSus =
+  | 'terburuk' | 'buruk' | 'lumayan' | 'baik' | 'sangatBaik' | 'terbaik';
+export type KeberterimaanSus = 'takDiterima' | 'marginal' | 'diterima';
+
+export interface ButirSus {
+  butir: number;
+  favorable: boolean;
+  rerataMentah: number;
+  rerataSumbangan: number;
+}
+
+export interface RespondenSus {
+  responden: string;
+  skor: number;
+  peringkat: PeringkatSus | null;
+  adjektiva: AdjektivaSus | null;
+  keberterimaan: KeberterimaanSus | null;
+}
+
+export interface HasilSus {
+  n: number;
+  rerata: number;
+  median: number;
+  sb: number | null;
+  minimum: number;
+  maksimum: number;
+  galatBaku: number | null;
+  selangBawah: number | null;
+  selangAtas: number | null;
+  peringkat: PeringkatSus | null;
+  adjektiva: AdjektivaSus | null;
+  keberterimaan: KeberterimaanSus | null;
+  persentil: number;
+  diAtasPatokan: boolean;
+  alphaCronbach: number | null;
+  butir: ButirSus[];
+  responden: RespondenSus[];
+}
+
+export function analisisSus(mesin: Mesin, m: readonly (readonly number[])[]) {
+  return mesin.panggil<HasilSus>(`ps_analisis_sus(${matriks(m)})`);
+}

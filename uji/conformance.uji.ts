@@ -20,7 +20,10 @@ import {
   alphaCronbach,
   analisisAitem,
   analisisGuttman,
+  bartlett,
+  kmo,
   konversiSkor,
+  nilaiEigen,
   kr20,
   kr21,
   pearson,
@@ -209,6 +212,45 @@ describe('konformansi terhadap numpy dan scipy', () => {
       expect(peserta.z).toBeCloseTo(harapan.z[i] as number, 10);
       expect(peserta.t).toBeCloseTo(harapan.t[i] as number, 10);
       expect(peserta.stanine).toBe(harapan.stanine[i]);
+    });
+  });
+});
+
+describe('konformansi analisis faktor', () => {
+  const kasus = emas.kasus.find((k) => k.jenis === 'faktor');
+
+  it('vektor emas memuat kasus analisis faktor', () => {
+    expect(kasus).toBeDefined();
+  });
+
+  it('uji Bartlett cocok dengan numpy dan scipy', async () => {
+    const harapan = (kasus!.harapan as {
+      bartlett: { penentu: number; khiKuadrat: number; db: number; p: number };
+    }).bartlett;
+    const hasil = await bartlett(mesin, kasus!.matriks as number[][]);
+    // Penentu matriks korelasi datang dari LU di numpy dan dari LAPACK di R;
+    // keduanya bertemu, dan nilai p-nya dari chi2.sf melawan pchisq.
+    expect(hasil.penentu).toBeCloseTo(harapan.penentu, 10);
+    expect(hasil.khiKuadrat).toBeCloseTo(harapan.khiKuadrat, 9);
+    expect(hasil.db).toBe(harapan.db);
+    expect(Math.abs(hasil.p - harapan.p)).toBeLessThan(TOLERANSI);
+  });
+
+  it('KMO keseluruhan dan MSA tiap butir cocok', async () => {
+    const harapan = (kasus!.harapan as { kmo: { kmo: number; msa: number[] } }).kmo;
+    const hasil = await kmo(mesin, kasus!.matriks as number[][]);
+    expect(hasil.kmo).toBeCloseTo(harapan.kmo, 10);
+    hasil.butir.forEach((butir, j) => {
+      expect(butir.msa).toBeCloseTo(harapan.msa[j] as number, 10);
+    });
+  });
+
+  it('nilai eigen cocok, meski dihitung oleh dua rutin aljabar yang berbeda', async () => {
+    const harapan = (kasus!.harapan as { eigen: number[] }).eigen;
+    const hasil = await nilaiEigen(mesin, kasus!.matriks as number[][]);
+    expect(hasil).toHaveLength(harapan.length);
+    hasil.forEach((baris, i) => {
+      expect(baris.eigen).toBeCloseTo(harapan[i] as number, 9);
     });
   });
 });

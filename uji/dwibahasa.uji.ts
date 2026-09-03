@@ -66,6 +66,7 @@ beforeAll(async () => {
   const statis = await import('../src/ui/halaman/statis');
   const modul = await import('../src/ui/halaman/modul');
   const kalkulator = await import('../src/ui/halaman/kalkulator');
+  const lanjutan = await import('../src/ui/halaman/lanjutan');
 
   kamus = kamusModul.kamus;
   pasangBahasa = i18n.pasangBahasa;
@@ -90,6 +91,8 @@ beforeAll(async () => {
     { nama: 'guttman', bangun: () => kalkulator.halamanGuttman(konteks) },
     { nama: 'likert', bangun: () => kalkulator.halamanLikert(konteks) },
     { nama: 'tabelR', bangun: () => kalkulator.halamanTabelR(konteks) },
+    { nama: 'faktor', bangun: () => lanjutan.halamanFaktor(konteks) },
+    { nama: 'sus', bangun: () => lanjutan.halamanSus(konteks) },
   ];
 });
 
@@ -161,7 +164,7 @@ const DIIZINKAN = new Set([
   'Gable', 'Suryabrata', 'Djaali', 'github', 'com', 'xyb3rpunq',
   'pengukuran', 'psikologis', 'alpha', 'Alpha', 'Bb', 'Pkb', 'pm', 'df',
   'BA', 'JA', 'BB', 'JB', 'Js', 'XY', 'X', 'Y', 'U', 'V', 'K', 'i',
-  'r∗', 'P·D', 'z·T', 'S·Q', 'Lb', 'Pcb',
+  'r∗', 'P·D', 'z·T', 'S·Q', 'Lb', 'Pcb', 'KMO', 'MSA', 'SUS',
 ]);
 
 /** Kode butir dan responden pada data contoh: S1, B3, G2, T7, R14, P01, A5. */
@@ -255,6 +258,12 @@ describe('kelengkapan kamus', () => {
       'K75',
       'N',
       'Q (spread)',
+      // Nama diri alat ukur dan singkatan yang tidak pernah diterjemahkan.
+      'Kaiser-Meyer-Olkin',
+      'MSA',
+      'SUS',
+      'System Usability Scale',
+      'Marginal',
     ]);
     const kunciKembar: string[] = [];
     const bandingkan = (a: unknown, b: unknown, awalan: string): void => {
