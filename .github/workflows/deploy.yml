@@ -1,0 +1,62 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  bangun:
+    name: Bangun situs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - run: npm ci
+
+      # Uji dijalankan sebelum deploy, bukan sesudahnya. Situs yang salah hitung
+      # lebih buruk daripada situs yang belum diperbarui.
+      - name: Periksa tipe dan jalankan uji
+        run: |
+          npm run periksa
+          npm test
+
+      # Runtime R disalin ke dist/webr oleh langkah build. Ukurannya sekitar
+      # 46 MB dan itu memang disengaja: seluruh runtime dilayani dari asal yang
+      # sama dengan situsnya, tanpa satu pun permintaan ke pihak ketiga.
+      - name: Bangun
+        run: |
+          npx vite build
+          node scripts/salin-runtime.mjs
+          touch dist/.nojekyll
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  terbitkan:
+    name: Terbitkan ke GitHub Pages
+    needs: bangun
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4

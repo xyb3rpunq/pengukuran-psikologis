@@ -1,0 +1,26 @@
+{
+  "name": "pengukuran-psikologis",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "TERA — mesin psikometri PSI307 di peramban. Zero dependencies, terverifikasi terhadap modul kuliah.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build && node scripts/salin-runtime.mjs",
+    "periksa": "tsc --noEmit",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "conformance": "python conformance/referensi.py",
+    "postinstall": "node scripts/tambal-webr.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^26.4.1",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.7",
+    "vitest": "^2.1.8"
+  },
+  "dependencies": {
+    "webr": "^0.6.0"
+  }
+}

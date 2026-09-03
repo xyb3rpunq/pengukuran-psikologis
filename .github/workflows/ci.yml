@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  uji:
+    name: Tipe dan uji
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - run: npm ci
+
+      - name: Periksa tipe
+        run: npm run periksa
+
+      - name: Jalankan uji
+        run: npm test
+
+      - name: Build
+        run: npx vite build
+
+  konformansi:
+    name: Konformansi numpy dan scipy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - run: npm ci
+      - run: pip install numpy scipy
+
+      # Vektor emas dibangkitkan ulang, lalu dibandingkan dengan yang tersimpan
+      # di repositori. Kalau berbeda, ada rumus di sisi Python yang berubah
+      # tanpa vektornya ikut diperbarui — dan uji konformansi jadi menguji
+      # sesuatu yang sudah usang.
+      - name: Bangkitkan ulang vektor emas
+        run: python conformance/referensi.py
+
+      - name: Pastikan vektor emas tidak berubah
+        run: git diff --exit-code -- conformance/vektor.json
+
+      - name: Jalankan uji konformansi
+        run: npx vitest run uji/conformance.uji.ts

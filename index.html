@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="id" data-tema="gelap">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TERA — Laboratorium Pengukuran Psikologis</title>
+    <meta
+      name="description"
+      content="Mesin psikometri PSI307 yang berjalan di peramban: analisis aitem, validitas, reliabilitas, skor standar, Thurstone, Guttman, dan Likert. Ditulis dalam R, dijalankan lewat WebAssembly."
+    />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="author" content=".Deckyx" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b0f14'/%3E%3Cpath d='M4 23 Q10 23 13 13 Q16 3 19 13 Q22 23 28 23' fill='none' stroke='%234dd4c8' stroke-width='2.4'/%3E%3C/svg%3E" />
+    <style>
+      /* Latar dipasang sebelum CSS utama dimuat supaya tidak ada kedipan putih
+         pada tema gelap. Nilainya sengaja diulang di sini, bukan diimpor. */
+      html[data-tema='gelap'] { background: #0b0f14; }
+      html[data-tema='terang'] { background: #f6f8fb; }
+      body { margin: 0; }
+    </style>
+    <script>
+      // Tema dibaca sebelum berkas apa pun dieksekusi. Menunggu modul utama
+      // berarti halaman sempat tergambar dengan tema yang salah lebih dulu.
+      try {
+        var tersimpan = localStorage.getItem('tera.tema');
+        if (tersimpan !== 'terang' && tersimpan !== 'gelap') {
+          tersimpan = window.matchMedia('(prefers-color-scheme: light)').matches
+            ? 'terang'
+            : 'gelap';
+        }
+        document.documentElement.dataset.tema = tersimpan;
+      } catch (galat) {
+        document.documentElement.dataset.tema = 'gelap';
+      }
+    </script>
+  </head>
+  <body>
+    <noscript>
+      <p style="padding: 24px; font-family: sans-serif">
+        Situs ini menjalankan mesin R di dalam peramban, jadi JavaScript harus
+        diaktifkan. — This site runs an R engine inside your browser, so
+        JavaScript must be enabled.
+      </p>
+    </noscript>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
